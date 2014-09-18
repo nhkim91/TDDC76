@@ -1,9 +1,5 @@
 #include "list.h"
 
-
-//Spelar ordning roll?
-
-
 void build_lists(istream& is, list list_1, list list_2)
 {
 	// hur tar man in saker från inströmmen?
@@ -16,7 +12,7 @@ void append(list& list_, const string& name, int age)
 	{
 		list_ = p;
 		return;
-	}	
+	}
 }
 
 void insert(list& list_, const string& name, int age)
@@ -29,7 +25,6 @@ void insert(list& list_, const string& name, int age)
 	}
 	else
 	{
-		//p = new list(name, age, list_node)
 		p->next = list_; // pekar på början av listan
 		list_ = p;
 	}
@@ -38,7 +33,7 @@ void insert(list& list_, const string& name, int age)
 void clear(list& list_)
 {
 	delete[] list_; //tar bort alla noder
-	list_ = nullptr; 
+	list_ = nullptr;
 }
 
 bool empty(const list& list_)
@@ -51,8 +46,20 @@ bool empty(const list& list_)
 }
 
 list copy(const list& list_)
-{
-	for (auto it = list_;
+{   list result{nullptr}
+
+	for (auto it = list_; !empty(it); it = it->next)
+    {
+        if (result == nullptr)
+        {
+            result = it->next;
+        }
+        else
+        {
+            result = new list_node(it->name, it->age, nullptr);
+        }
+
+    }
 }
 
 void print(const list& list_, ostream& os)
