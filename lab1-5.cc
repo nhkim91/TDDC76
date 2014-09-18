@@ -11,7 +11,7 @@ using namespace std;
 
 using list = list_node*;
 
-// Komplettera och modifiera:
+// Komplettera och modifiera: 
 
 int main(int argc, char **argv)
 {

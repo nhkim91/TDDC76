@@ -25,7 +25,7 @@ void append(list& list_, const string& name, int age)
 
 void insert(list& list_, const string& name, int age)
 {
-    auto p = new list_node(name, age, nullptr); //typ list_node*
+    p = new list_node {name, age, nullptr}; //typ list_node*
     if (list_ == nullptr)
     {
         list_ = p;
@@ -58,11 +58,11 @@ list copy(const list& list_)
     {
         if (result == nullptr)
         {
-            result = new list_node();
+            result = new list_node {name, age, nullptr};
         }
         else
         {
-            result = new list_node(node->name, node->age, nullptr);
+            result = new list_node {node->name, node->age, nullptr};
         }
 
     }
