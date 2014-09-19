@@ -31,8 +31,8 @@ void insert(list& list_, const string& name, int age)
         list_ = p;
         return;
     }
-        p->next = list_; // pekar på början av listan
-        list_ = p;
+    p->next = list_; // pekar på början av listan
+    list_ = p;
 }
 
 void clear(list& list_)
@@ -54,33 +54,20 @@ List copy(const List& list_)
 {
     if(empty(list_))
     {
-<<<<<<< HEAD
-        List new_list{nullptr};
+        List new_list {nullptr};
         return new_list;
-=======
-        if (result == nullptr)
-        {
-            result = new list_node {name, age, nullptr};
-        }
-        else
-        {
-            result = new list_node {node->name, node->age, nullptr};
-        }
-
->>>>>>> origin/master
     }
-
-    auto p = new person{list_->name, list_->age, copy(list_->next)};
-    List new_list = p;
-    return new_list;
+        auto p = new person {list_->name, list_->age, copy(list_->next)};
+        List new_list = p;
+        return new_list;
 }
 
-void print(const list& list_, ostream& os)
-{
-    for (auto it = list_; !empty(it); it = it->next)
+    void print(const list& list_, ostream& os)
     {
-        os << it->name << " (" << it->age << ")" << endl;
+        for (auto it = list_; !empty(it); it = it->next)
+        {
+            os << it->name << " (" << it->age << ")" << endl;
+        }
     }
-}
 
 
