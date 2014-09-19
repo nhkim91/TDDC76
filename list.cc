@@ -1,20 +1,32 @@
+#include <string>
+#include <istream>
+#include <iostream>
 #include "list.h"
 
-void build_lists(istream& is, list list_1, list list_2)
+void build_lists(istream& is, list& list_1, list& list_2)
 {
-
-}
+	string name;
+	int age;
+	
+	while (is >> name)
+	{
+		is >> age;
+		
+		insert(list_1, name, age);
+		append(list_2, name, age);
+	}
+}	
 
 void append(list& list_, const string& name, int age)
 {
-    auto p = new list_node {name, age, nullptr}; // typ list_node*
+    auto p = new list_node{name, age, nullptr}; // typ list_node*
     if (list_ == nullptr) // tom lista
     {
         list_ = p;
         return;
     }
     // Det finns minst en nod i listan, sök upp den sista noden och länka in den nya noden efter den sista
-    auto last = list; // typ List_Node*
+    auto last = list_; // typ List_Node*
     while (last->next != nullptr)
     {
         last = last->next;
@@ -25,7 +37,7 @@ void append(list& list_, const string& name, int age)
 
 void insert(list& list_, const string& name, int age)
 {
-    p = new list_node {name, age, nullptr}; //typ list_node*
+    auto p = new list_node {name, age, nullptr}; //typ list_node*
     if (list_ == nullptr)
     {
         list_ = p;
@@ -52,12 +64,13 @@ bool empty(const list& list_)
 
 list copy(const list& list_)
 {
-    if(empty(list_))
+    
+	if(empty(list_))
     {
         list new_list {nullptr};
         return new_list;
     }
-    auto p = new person {list_->name, list_->age, copy(list_->next)};
+    auto p = new list_node{list_->name, list_->age, copy(list_->next)};
     list new_list = p;
     return new_list;
 }

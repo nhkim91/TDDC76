@@ -17,7 +17,7 @@ struct list_node
 // kan man använda list iställer för List?
 using list = list_node*;
 
-void build_lists(istream& is, list list_1, list list_2); //Spelar det någon roll i vilken ordning roll?
+void build_lists(istream& is, list& list_1, list& list_2); //Spelar det någon roll i vilken ordning roll?
 
 void append(list& list_2, const string& name, int age);
 
