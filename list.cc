@@ -50,22 +50,17 @@ bool empty(const list& list_)
     return false;
 }
 
-list copy(const list& list_)
+List copy(const List& list_)
 {
-    list result {nullptr};
-
-    for (auto node = list_; !empty(node); node = node->next)
+    if(empty(list_))
     {
-        if (result == nullptr)
-        {
-            result = new list_node();
-        }
-        else
-        {
-            result = new list_node(node->name, node->age, nullptr);
-        }
-
+        List new_list{nullptr};
+        return new_list;
     }
+
+    auto p = new person{list_->name, list_->age, copy(list_->next)};
+    List new_list = p;
+    return new_list;
 }
 
 void print(const list& list_, ostream& os)
