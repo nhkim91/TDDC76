@@ -31,6 +31,8 @@ list copy(const list& list_);
 
 void reverse(list& list_);
 
+void print(const list& list_, ostream& os);
+
 void print_reverse(const list& list_, ostream& os);
 
 void swap(list& list_1, list& list_2);

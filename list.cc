@@ -50,25 +50,28 @@ bool empty(const list& list_)
     return false;
 }
 
-List copy(const List& list_)
+list copy(const list& list_)
 {
     if(empty(list_))
     {
-        List new_list {nullptr};
+        list new_list {nullptr};
         return new_list;
     }
-        auto p = new person {list_->name, list_->age, copy(list_->next)};
-        List new_list = p;
-        return new_list;
+    auto p = new person {list_->name, list_->age, copy(list_->next)};
+    list new_list = p;
+    return new_list;
 }
 
-    void print(const list& list_, ostream& os)
+
+
+
+void print(const list& list_, ostream& os)
+{
+    for (auto it = list_; !empty(it); it = it->next)
     {
-        for (auto it = list_; !empty(it); it = it->next)
-        {
-            os << it->name << " (" << it->age << ")" << endl;
-        }
+        os << it->name << " (" << it->age << ")" << endl;
     }
+}
 
 void reverse(list& list_)
 {
