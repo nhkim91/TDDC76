@@ -3,15 +3,16 @@
 #include <string>
 #include "list.h"
 
+
 using namespace std;
 
-// Deklarera en funktion build_lists(inström, list_1, list_2) som läser namn 
+// Deklarera en funktion build_lists(inström, list_1, list_2) som läser namn
 // från inströmmen och använder insert() för att sätta in i list_1 och append()
 // för att sätta in i list_2. build_lists() ska definieras efter main().
 
 using list = list_node*;
 
-// Komplettera och modifiera: 
+// Komplettera och modifiera:
 
 int main(int argc, char **argv)
 {
@@ -22,18 +23,18 @@ int main(int argc, char **argv)
 		cout << "There is no file argument!" << endl;
 		return 0;
 	}
-   
-    // Öppna en infilström för den fil vars namn givits på kommandoraden. 
-    // Kontrollera att öppningen lyckas, om inte ska ett felmeddelande 
+
+    // Öppna en infilström för den fil vars namn givits på kommandoraden.
+    // Kontrollera att öppningen lyckas, om inte ska ett felmeddelande
     // skrivas ut och programmet avslutas.
 	ifstream ifs;
 	ifs.open(argv[1], ifstream::in);
-	
+
 	if(!ifs.is_open())
 	{
 		cout << "Could not open file!" << endl;
 		return 0;
-	}	
+	}
 
    // Deklarera två tomma listor, list_1 och list_2
 	list list_1{nullptr};
@@ -45,12 +46,12 @@ int main(int argc, char **argv)
 	{
 		cout << "list_1 and list_2 is empty." << endl;
 	}
-   
+
    // Anropa build_lists() för att läsa namn från indata och sätta in i namnen
    // i list_1 och list_2, enligt vad som sagts om build_lists() ovan.
-		
+
 	 build_lists(ifs, list_1, list_2);
-   
+
    cout << "Lista 1 efter inläsning av namn:\n";
    // Skriv ut list_1 med print()
    cout << "Lista 2 efter inläsning av namn:\n";
