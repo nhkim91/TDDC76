@@ -70,4 +70,45 @@ List copy(const List& list_)
         }
     }
 
+void reverse(list& list_)
+{
+    if(empty(list_) || empty(list_->next))
+    {
+        return;
+    }
 
+    list prev = list_;
+    list current = list_->next;
+    list next_node = current->next;
+
+    while(!empty(next_node))
+    {
+        current->next = prev; // Ändrar håll på pekaren i listan.
+        prev = current;
+        current = next_node;
+        next_node = next_node->next;
+    }
+
+    current->next = prev;
+    list_->next = {nullptr};
+    list_ = current;
+}
+
+void print_reverse(const list& list_, ostream& os) //Har inte testat ostream-grejen, bara med cout.
+{
+    if(empty(list_))
+    {
+        return;
+    }
+
+    print_reverse(list_->next, os);
+    os << list_->name << " (" << list_->age << ")" << endl;
+}
+
+//Är det verkligen så enkelt?
+void swap(list& list_1, list& list_2)
+{
+    list temp = list_1;
+    list_1 = list_2;
+    list_2 = temp;
+}
