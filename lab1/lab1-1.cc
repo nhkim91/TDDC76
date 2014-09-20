@@ -5,7 +5,7 @@
  *                Kerstin Söderqvist 911006-0309 Y3.c kerso255
  * DATUM:         2014-09-16
  *
- * BESKRIVNING:
+ * BESKRIVNING: 
  * Gör en tabell av ett inmatet värde (i) 
  * från dec. till oct och hex från 1:i
  */
