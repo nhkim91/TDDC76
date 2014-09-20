@@ -1,3 +1,9 @@
+# FILNAMN:       makefile
+# LABORATION:    lab1-5
+#PROGRAMMERARE: Kim Nguyen Hoang 910112-0260 Y3.c kimng797
+#               Kerstin Söderqvist 911006-0309 Y3.c kerso255
+# DATUM:         2014-09-20
+
 CCC = g++	#C++ kompilator(g++)
 CCFLAGS = -g -std=c++11 #Kompilerar 
 LDFLAGS = -L/sw/gcc-${GCC4_V}/lib -static-libstdc++ 

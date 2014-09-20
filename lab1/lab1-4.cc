@@ -63,8 +63,6 @@ vector<word_entry> insert_word(string word, vector<word_entry> word_list)
     return word_list;
 }
 
-
-
 int main()
 {
     string word;
