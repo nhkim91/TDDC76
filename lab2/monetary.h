@@ -32,10 +32,16 @@ namespace monetary
 
         string currency;
         int unit, h_unit;
+
+
     };
 
-void swap(money& value);
-}
+void swap(money&, money&) noexcept;
+
+void copy(money&);
+
+} //namespace monetary
+
 #endif
 
 
