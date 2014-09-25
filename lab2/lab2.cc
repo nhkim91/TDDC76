@@ -10,8 +10,8 @@ using namespace std;
 int main()
 {
 
-    money m1();
-    money m2("SEK");
+    monetary::money m1();
+    monetary::money m2("SEK");
 
     //cout << m2;
 }
