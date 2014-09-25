@@ -33,12 +33,10 @@ namespace monetary
         string currency;
         int unit, h_unit;
 
-
+        // Interna hjälpfunktioner
+        void swap(money&, money&) noexcept;
+        void copy(money&);
     };
-
-void swap(money&, money&) noexcept;
-
-void copy(money&);
 
 } //namespace monetary
 
