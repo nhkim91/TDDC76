@@ -3,7 +3,7 @@
  * LABORATION:    lab1-5
  * PROGRAMMERARE: Kim Nguyen Hoang 910112-0260 Y3.c kimng797
  *                Kerstin Söderqvist 911006-0309 Y3.c kerso255
- * DATUM:         2014-09-20
+ * DATUM:         2014-09-29
  *
  * BESKRIVNING:
  * Program som gör om/skriver ut listor. T.ex vänder en lista eller raderar innehållet i en lista.
@@ -16,102 +16,101 @@
 
 using namespace std;
 
-using list = list_node*;
 
 int main(int argc, char **argv)
 {
-   // Kontrollera att ett argument (filnamn) angivits på kommandoraden.
-   // Om inte skriv ut ett felmeddelande och avsluta programmet.
-	if (argc == 0)
-	{
-		cout << "Det finns inget argument!" << endl;
-		return 0;
-	}
+    // Kontrollera att ett argument (filnamn) angivits på kommandoraden.
+    // Om inte skriv ut ett felmeddelande och avsluta programmet.
+    if (argc == 1)
+    {
+        cout << "Det finns inget argument!" << endl;
+        return 0;
+    }
 
 
-	ifstream ifs; // infilström
-	ifs.open(argv[1], ifstream::in);
+    ifstream ifs; // infilström
+    ifs.open(argv[1], ifstream::in);
 
-	if(!ifs.is_open()) 
-	{
-		cout << "Filen kunde inte öppnas" << endl;
-		return 0;
-	}
+    if(!ifs.is_open())
+    {
+        cout << "Filen kunde inte öppnas" << endl;
+        return 0;
+    }
 
-	list list_1{nullptr}; //Tom lista
-	list list_2{nullptr};
+    list list_1 {nullptr}; //Tom lista
+    list list_2 {nullptr};
 
-	if(empty(list_1) && empty(list_2))
-	{
-		cout << "Lista 1 och Lista 2 är tomma\n";
-	}
-	
-	 build_lists(ifs, list_1, list_2); // Gör Lista 1 och Lista 2
+    if(empty(list_1) && empty(list_2))
+    {
+        cout << "Lista 1 och Lista 2 är tomma\n";
+    }
 
-   cout << "\nLista 1 efter inläsning av namn:\n";
+    build_lists(ifs, list_1, list_2); // Gör Lista 1 och Lista 2
 
-   print(list_1, cout);
-   
-   cout << "\nLista 2 efter inläsning av namn:\n";
+    cout << "\nLista 1 efter inläsning av namn:\n";
 
-	print(list_2, cout);
-   
-   cout << "\nLista 1 utskriven i omvänd ordning:\n";
+    print(list_1, cout);
 
-   print_reverse(list_1, cout); 
-   
-   cout << "\nLista 1 vänds.\n";
+    cout << "\nLista 2 efter inläsning av namn:\n";
 
-   reverse(list_1);
-   
-   cout << "\nLista 1 efter vändning:\n";
+    print(list_2, cout);
 
-	print(list_1, cout);
-	
-   cout << "\nLista 2 raderas.\n";
+    cout << "\nLista 1 utskriven i omvänd ordning:\n";
 
-   clear(list_2);
-   
-   if (empty(list_2))
-      cout << "\nLista 2 är tom.\n";
-   else
-      cout << "\nLista 2 är inte tom.\n";
+    print_reverse(list_1, cout);
 
-   cout << "\nLista 2 tilldelas en kopia av lista 1.\n";
+    cout << "\nLista 1 vänds.\n";
 
-   list_2 = copy(list_1);
-   
-   cout << "\nLista 2 innehåller:\n";
+    reverse(list_1);
 
-   print(list_2, cout);
+    cout << "\nLista 1 efter vändning:\n";
 
-   cout << "\nLista 2 raderas.\n";
+    print(list_1, cout);
 
-   clear(list_2);
-   
-   cout << "\nLista 1 och 2 byter innehåller.\n";
+    cout << "\nLista 2 raderas.\n";
 
-   swap(list_1, list_2);
-   
-   if (empty(list_1))  
-      cout << "\nLista 1 är tom.\n";
-   else
-      cout << "\nLista 1 är inte tom.\n";
-	  
-   cout << "\nLista 2 innehåller:\n";
+    clear(list_2);
 
-   print(list_2, cout);
+    if (empty(list_2))
+        cout << "\nLista 2 är tom.\n";
+    else
+        cout << "\nLista 2 är inte tom.\n";
 
-   cout << "\nLista 2 raderas.\n";
+    cout << "\nLista 2 tilldelas en kopia av lista 1.\n";
 
-   clear(list_2);
+    list_2 = copy(list_1);
 
-   if( empty(list_1) && empty(list_2) )
-   {
-		cout << "\nLista 1 och Lista 2 är tomma.\n" << endl;
-   }
+    cout << "\nLista 2 innehåller:\n";
 
-   cout << "Programmet avslutas.\n";
+    print(list_2, cout);
 
-   return 0;
+    cout << "\nLista 2 raderas.\n";
+
+    clear(list_2);
+
+    cout << "\nLista 1 och 2 byter innehåller.\n";
+
+    swap(list_1, list_2);
+
+    if (empty(list_1))
+        cout << "\nLista 1 är tom.\n";
+    else
+        cout << "\nLista 1 är inte tom.\n";
+
+    cout << "\nLista 2 innehåller:\n";
+
+    print(list_2, cout);
+
+    cout << "\nLista 2 raderas.\n";
+
+    clear(list_2);
+
+    if( empty(list_1) && empty(list_2) )
+    {
+        cout << "\nLista 1 och Lista 2 är tomma.\n" << endl;
+    }
+
+    cout << "Programmet avslutas.\n";
+
+    return 0;
 }

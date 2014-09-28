@@ -3,7 +3,7 @@
  * LABORATION:    lab1-5
  * PROGRAMMERARE: Kim Nguyen Hoang 910112-0260 Y3.c kimng797
  *                Kerstin Söderqvist 911006-0309 Y3.c kerso255
- * DATUM:         2014-09-20
+ * DATUM:         2014-09-29
  *
  * BESKRIVNING:
  * Deffinitionsfil för alla funktioner som används i lab1-5
@@ -14,32 +14,34 @@
 #include <iostream>
 #include "list.h"
 
+using namespace std;
+
 void build_lists(istream& is, list& list_1, list& list_2)
 {
-	string name;
-	int age;
-	
-	while (is >> name)
-	{
-		is >> age;
-		
-		insert(list_1, name, age); // Sätter in namn och ålder först i listan
-		append(list_2, name, age); // Sätter in namn och ålder sist i listan
-	}
-}	
+    string name;
+    int age;
+
+    while (is >> name)
+    {
+        is >> age;
+
+        insert(list_1, name, age); // Sätter in namn och ålder först i listan
+        append(list_2, name, age); // Sätter in namn och ålder sist i listan
+    }
+}
 
 //Sätter in namn och ålder sist i listan
-void append(list& list_, const string& name, int age) 
+void append(list& list_, const string& name, int age)
 {
-    auto p = new list_node{name, age, nullptr}; // typ list_node*
+    auto p = new list_node {name, age, nullptr}; // typ list_node*
     if (list_ == nullptr) // tom lista
     {
         list_ = p;
         return;
     }
-	
+
     auto last = list_; // typ list_node*
-    while (last->next != nullptr) 
+    while (last->next != nullptr)
     {
         last = last->next;
     }
@@ -62,7 +64,10 @@ void insert(list& list_, const string& name, int age)
 // Radera innehållet i en lista
 void clear(list& list_)
 {
-    delete[] list_; //tar bort alla noder
+    for(auto it = list_; !empty(it); it = it->next)
+    {
+        delete it; //tar bort alla noder
+    }
     list_ = nullptr;
 }
 
@@ -79,19 +84,19 @@ bool empty(const list& list_)
 // Kopierar en lista
 list copy(const list& list_) // Kopierar en lista
 {
-    
-	if(empty(list_))
+
+    if(empty(list_))
     {
         list new_list {nullptr};
         return new_list;
     }
-    auto p = new list_node{list_->name, list_->age, copy(list_->next)}; 
+    auto p = new list_node {list_->name, list_->age, copy(list_->next)};
     list new_list = p;
     return new_list;
 }
 
 // Skriver ut en lista
-void print(const list& list_, ostream& os) 
+void print(const list& list_, ostream& os)
 {
     for (auto it = list_; !empty(it); it = it->next)
     {
@@ -99,7 +104,7 @@ void print(const list& list_, ostream& os)
     }
 }
 
-// Vänder på en lista 
+// Vänder på en lista
 void reverse(list& list_)
 {
     if(empty(list_) || empty(list_->next))
@@ -108,7 +113,7 @@ void reverse(list& list_)
     }
 
     // Hjälp-pekare
-	list prev = list_; 
+    list prev = list_;
     list current = list_->next;
     list next_node = current->next;
 
@@ -138,7 +143,7 @@ void print_reverse(const list& list_, ostream& os)
 }
 
 // Byter innehåll på två listor
-void swap(list& list_1, list& list_2) 
+void swap(list& list_1, list& list_2)
 {
     list temp = list_1;
     list_1 = list_2;
