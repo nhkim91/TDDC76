@@ -4,11 +4,9 @@
 #include <string>
 #include <ostream>
 #include <stdexcept>
-#include <iomanip>
 
 namespace monetary
 {
-    //*
     class monetary_error : public std::logic_error
     {
     public:
@@ -18,7 +16,6 @@ namespace monetary
         explicit monetary_error(const char* what_arg) noexcept :
             std::logic_error {what_arg} {}
     };
-    //*/
 
     class money
     {
@@ -48,6 +45,7 @@ namespace monetary
 
         //Utmatning
         std::ostream& print(std::ostream&) const;
+		//friend std::ostream& operator<< (std::ostream& os, const monetary::money& rhs);
 
     private:
 
@@ -56,15 +54,13 @@ namespace monetary
 
         // Interna hjälpfunktioner
         void swap(money&) noexcept;
+		
     };
+	
+	std::ostream& operator<< (std::ostream& os, const monetary::money& rhs);
+	
 
 } //namespace monetary
-
-std::ostream& operator<< (std::ostream& os, const monetary::money& rhs)
-	{
-		return rhs.print(os);
-	}
-
 #endif
 
 

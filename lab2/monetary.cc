@@ -58,22 +58,23 @@ money& money::operator = (money&& rhs) & noexcept
 //Sammansättning +
 money money::operator+(const money& rhs)
 {
-    if(currency == "" || currency == rhs.currency)
+    if(!(currency == "" || currency == rhs.currency || rhs.currency == ""))
+	{
+        throw monetary_error{"You can't add two different currency!"};
+		return *this;
+    }
+	else if(currency == "" || currency == rhs.curreny) // Kollar om man behöver ändra currency
     {
         currency = rhs.currency;
-        unit = unit + rhs.unit;
-        h_unit = h_unit + rhs.h_unit;
     }
-    else if(rhs.currency == "")
-    {
-        unit = unit + rhs.unit;
-        h_unit = h_unit + rhs.h_unit;
-    }
-    else
-    {
-        throw monetary_error{"You can't add two different currency!"};
-    }
-    return *this;
+	unit = unit + rhs.unit;
+    h_unit = h_unit + rhs.h_unit;
+	if (h_unit > 99)
+	{
+		unit++;
+		h_unit = h_unit - 100;
+	}
+	return *this;
 }
 
 //Utmatning
@@ -111,5 +112,11 @@ bool money::operator < (const money& rhs) const
     }
     throw monetary_error{"Different currency!"};
 }
+
+std::ostream& operator<< (std::ostream& os, const monetary::money& rhs)
+	{
+		return rhs.print(os);
+	}
+
 
 }
