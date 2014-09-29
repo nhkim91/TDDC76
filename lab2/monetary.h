@@ -33,6 +33,10 @@ namespace monetary
 
         //Sammansättning +
         money operator+ (const money&);
+		
+		//Stegning 
+		money& operator++(); //++m
+		money operator++(int); //m++	
 
         //jämförelser
         bool operator == (const money&) const;
