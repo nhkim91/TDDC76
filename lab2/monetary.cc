@@ -219,122 +219,124 @@ namespace monetary
 
 		while(is.good())
 		{
-			ignore_space(is);
-
-			c = is.peek();
-			
-			while(isalpha(c))
+		  ignore_space(is);
+		  
+		  c = is.peek();
+		  
+		  while(isalpha(c))
+		    {
+		      new_currency += toupper(c); // Sätter in bokstäver sist i stringen
+		      is.ignore(1);
+		      c = is.peek();
+		    }
+		  
+		  c = is.peek();
+		  
+		  if(c != ' ' && !new_currency.empty()) // fortsätter om det är ett mellanrum, annars avslutas programmet.
+		    {	
+		      break;
+		    }
+		  else
+		    {
+		      ignore_space(is);
+		    }
+		  
+		  c = is.peek();
+		  
+		  while(isdigit(c)) // kör så länge det är en siffra
+		    {
+		      new_unit = new_unit * 10 + c - 48; // -48 konventerar från ascci till decimal
+		      is.ignore(1);
+		      c = is.peek();
+		    }
+		  
+		  c = is.peek();
+		  
+		  if(c == '.')
+		    {
+		      is.ignore (1);
+		      
+		      c = is.peek();
+		      
+		      if(isdigit(c))	// kör så länge det är en siffra
 			{
-				new_currency += toupper(c); // Sätter in bokstäver sist i stringen
-				is.ignore(1);
-				c = is.peek();
-			}
-
-			c = is.peek();
-			
-			if(c != ' ' && !new_currency.empty()) // fortsätter om det är ett mellanrum, annars avslutas programmet.
-			{	
-				break;
-			}
-			else
-			{
-				ignore_space(is);
-			}
-
-			{	c = is.peek();
-			
-				while(isdigit(c)) // kör så länge det är en siffra
+			  for(int i = 0; i < 2; ++i) // Ser till att det bara är två decimaler
+			    {
+			      if(isdigit(c))
 				{
-					new_unit = new_unit * 10 + c - 48; // -48 konventerar från ascci till decimal
-					is.ignore(1);
-					c = is.peek();
+				  new_h_unit = new_h_unit * 10 + c -48; // -48 konventerar från ascci till decimal
+				  is.ignore(1);
 				}
-			}
-			
-			c = is.peek();
-			
-			if(c == '.')
-			{
-				is.ignore (1);
-
-				c = is.peek();
-				
-				if(isdigit(c))	// kör så länge det är en siffra
+			      else
 				{
-					for(int i = 0; i < 2; ++i) // Ser till att det bara är två decimaler
-					{
-						new_h_unit = new_h_unit * 10 + c -48; // -48 konventerar från ascci till decimal
-						is.ignore(1);
-						c = is.peek();
-						if(!isdigit(c))
-						{
-							new_h_unit = 0;
-						}
-					}
+				  new_h_unit = new_h_unit * 10;
 				}
+			      c = is.peek();
+			    }
 			}
-			else
-			{
-				break;
-			}
-			break;
+		    }
+		  else
+		    {
+		      break;
+		    }
+		  break;
 		}
 		m.check(new_currency, new_unit, new_h_unit); // Ser till att det är 3 bokstäver 
-
+		
 		return is;
 	}
-
-    //Stegning ++
-    //++m
-    Money& Money::operator++()
-    {
-        ++h_unit;
-
-        if(h_unit > 99)
-        {
-            ++unit;
-            h_unit = h_unit - 100;
-        }
-        return *this;
-    }
-
-    //m++
-    Money Money::operator++(int)
-    {
-        Money temp = *this;
-        operator++();
-        return temp;
-    }
-
-	//--m
-    Money& Money::operator--()
-    {
-        --h_unit;
-
-        if(h_unit < 0)
-        {
-            --unit;
-            h_unit = h_unit + 100;
-            if(unit < 0)
-            {
-                throw monetary_error {"Can't operate to a value less than zero!"};
-            }
-        }
-        return *this;
-    }
-
-    //m--
-    Money Money::operator--(int)
-    {
-        Money temp = *this;
-        operator--();
-        return temp;
-    }
-
-    //Labbeskrivningens currency(), som vi namngett get_currency p.g.a. att vi använder 'currency' som variabel. Tar fram 'currency'.
-    string Money::get_currency() const
-    {
-        return currency;
-    }
+  
+  //Stegning ++
+  //++m
+  Money& Money::operator++()
+  {
+    ++h_unit;
+    
+    if(h_unit > 99)
+      {
+	++unit;
+	h_unit = h_unit - 100;
+      }
+    return *this;
+  }
+  
+  //m++
+  Money Money::operator++(int)
+  {
+    Money temp = *this;
+    operator++();
+    return temp;
+  }
+  
+  //--m
+  Money& Money::operator--()
+  {
+    --h_unit;
+    
+    if(h_unit < 0)
+      {
+	--unit;
+	h_unit = h_unit + 100;
+	if(unit < 0)
+	  {
+	    throw monetary_error {"Can't operate to a value less than zero!"};
+	  }
+      }
+    return *this;
+  }
+  
+  //m--
+  Money Money::operator--(int)
+  {
+    Money temp = *this;
+    operator--();
+    return temp;
+  }
+  
+  //Labbeskrivningens currency(), som vi namngett get_currency p.g.a. att vi använder 'currency' som variabel. Tar fram 'currency'.
+  string Money::get_currency() const
+  {
+    return currency;
+  }
 } //namespace monetary
 
