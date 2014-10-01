@@ -1,154 +1,245 @@
-#include "monetary.h"
+#include <iostream>
 #include <string>
-#include <ostream>
-#include <iomanip>
+#include <stdexcept>
+#include "monetary.h"
+
+using namespace std;
 
 namespace monetary
 {
-    // Kopierings-konstruktor
-    money::money(const money& other)
+  void Money::swap(Money &rhs) noexcept
+  {
+    std::swap(currency, rhs.currency);
+    std::swap(unit, rhs.unit);
+    std::swap(h_unit, rhs.h_unit);
+  }
+
+
+  //Kopieringskonstruktor
+  Money::Money(const Money &m):
+    currency(m.currency),
+    unit(m.unit),
+    h_unit(m.h_unit)
+  {}
+
+  //Flyttkonstruktor
+  Money::Money(Money &&m) noexcept
+  {
+    swap(m);
+  }
+
+  //Kopieringstilldelning
+  Money& Money::operator=(const Money &rhs) &
+  {
+    if(currency == "" || currency == rhs.currency)
+      {
+	currency = rhs.currency;
+	unit = rhs.unit;
+	h_unit = rhs.h_unit;
+      }
+    else if(rhs.currency == "")
+      {
+	unit = rhs.unit;
+	h_unit = rhs.h_unit;
+      }
+    else
+      {
+	throw monetary_error{"Different currency!"};
+      }
+    return *this;
+  }
+
+  //Flytt-tilldelning kanske ska vara som kopieringstilldelningen?:
+  Money& Money::operator=(Money &&rhs) &
+  {
+    if(currency == "" || currency == rhs.currency)
+      {
+	swap(rhs);
+      }
+    else if(rhs.currency == "")
+      {
+	std::swap(unit, rhs.unit);
+	std::swap(h_unit, rhs.h_unit);
+      }
+    else
+      {
+	throw monetary_error{"Different currency!"};
+      }
+    return *this;
+  }
+
+  //Flytt-tilldelning - Vad ska den göra och när ska detta ske? std::move(m2)
+  /*
+  Money& Money::operator=(Money &&rhs)
+  {
+    swap(rhs);
+    return *this;
+  }
+  */
+
+  //Sammansättning
+  //operator+= (I t.ex. m1 + m4 får m1 summan.)
+  Money& Money::operator+=(const Money &rhs)
+  {
+    if(!(currency == "" || currency == rhs.currency || rhs.currency == ""))
+      {
+	throw monetary_error{"Different currency!"};
+	// return *this;
+      }
+    else if(currency == "") // Behöver inte ha andra statement:et.
+      {
+	currency = rhs.currency;
+      }
+    unit = unit + rhs.unit;
+    h_unit = h_unit + rhs.h_unit;
+    if(h_unit > 99)
+      {
+	unit++;
+	h_unit = h_unit - 100;
+      }
+    return *this;
+  }
+
+  //operator+
+  Money operator+(const Money &lhs, const Money &rhs)
+  {
+    return Money{lhs}.operator+=(rhs);
+  }
+
+
+  //Jämförelser
+  //operator==
+  bool Money::operator==(const Money& rhs) const
+  {
+    if(currency == "" || rhs.currency == "" || currency == rhs.currency)
+      {
+	if(unit == rhs.unit && h_unit == rhs.h_unit)
+	  {
+	    return true;
+	  }
+	return false;
+      }
+    throw monetary_error{"Different currency!"};
+  }
+
+  //operator<
+  bool Money::operator<(const Money& rhs) const
+  {
+    if(currency == "" || rhs.currency == "" || currency == rhs.currency)
+      {
+	if(unit < rhs.unit || (unit == rhs.unit && h_unit < rhs.h_unit))
+	  {
+	    return true;
+	  }
+	return false;
+      }
+    throw monetary_error{"Different currency!"};
+  }
+
+  //Utmatning
+  //print()
+  ostream& Money::print(ostream &os) const
+  {
+    if(h_unit < 10)
+      {
+	return os << currency << " " << unit << ".0" << h_unit;
+      }
+    return os << currency << " " << unit << "." << h_unit;
+  }
+
+  //operator<<
+  ostream& operator<<(ostream &os, const Money &rhs)
+  {
+    return rhs.print(os);
+  }
+
+  //Stegning ++
+  //++m
+  Money& Money::operator++()
     {
-        currency = other.currency;
-        unit = other.unit;
-        h_unit = other.h_unit;
-    }
+      ++h_unit; //Måste ha plustecknen före.
+      if(h_unit > 99)
+      {
+	++unit;
+	h_unit = h_unit - 100;
+      }
+    return *this;
+  }
 
-    void money::swap(money& rhs) noexcept
-    {
-        std::swap(currency,rhs.currency);
-        std::swap(unit, rhs.unit);
-        std::swap(h_unit, rhs.h_unit);
-    }
+  //m++
+  Money Money::operator++(int)
+  {
+    Money temp = *this;
+    //++*this; Borde göra samma sak som den undre, förutom att jag inte är helt säker på vad i *this som den räknar upp, och dessutom kollar den nog inte om h_unit blir större än 99 etc.
+    operator++();
+    return temp;
+  }
 
-    // Flytt-konstruktor
-    money::money(money&& m) noexcept
-    {
-        swap(m);
-    }
+  //Labbeskrivningens currency(), som vi namngett get_currency p.g.a. att vi använder 'currency' som variabel. Tar fram 'currency'.
+  string Money::get_currency() const
+  {
+    return currency;
+  }
 
+  /////////////////////////////////////////////////////////////
+  //VG-delen
 
-//Kopieringstilldelning
-	money& money::operator = (const money& rhs) &
-	{
-		if(currency == "" || currency == rhs.currency)
-		{
-			currency = rhs.currency;
-			unit = rhs.unit;
-			h_unit = rhs.unit;
-		}
-		else if(rhs.currency == "")
-		{
-			unit = rhs.unit;
-			h_unit = rhs.h_unit;
-		}
-		else
-		{
-			throw monetary_error{"Different currency!"};
-		}
-		return *this;
-	}
+  //Sammansatt tilldelning, operator+=, används av operator+ (hittas därför ovan)
 
-	//Flyttilldelning
-	money& money::operator = (money&& rhs) & noexcept
-	{
-		swap(rhs);
-		return *this;
-	}
+  //Stegning --
+  //--m
+  Money& Money::operator--()
+  {
+    --h_unit;
+    if(h_unit < 0)
+      {
+	--unit;
+	h_unit = h_unit + 100;
+	if(unit < 0)
+	  {
+	    throw monetary_error{"Can't operate to a value less than zero!"};
+	  }
+      }
+    return *this;
+  }
 
-	//Sammansättning +
-	money money::operator+(const money& rhs)
-	{
-		if(!(currency == "" || currency == rhs.currency || rhs.currency == ""))
-		{
-			throw monetary_error{"You can't add two different currency!"};
-			return *this;
-		}
-		else if(currency == "" || currency == rhs.currency) // Kollar om man behöver ändra currency
-		{
-			currency = rhs.currency;
-		}
-		unit = unit + rhs.unit;
-		h_unit = h_unit + rhs.h_unit;
-		if (h_unit > 99)
-		{
-			unit++;
-			h_unit = h_unit - 100;
-		}
-		return *this;
-	}
+  //m--
+  Money Money::operator--(int)
+  {
+    Money temp = *this;
+    operator--();
+    return temp;
+  }
 
-	//Stegning 
-	//++m
-	money& operator++()
-	{
-		h_unit = hunit++;
-		if (h_unit >99)
-		{
-			unit++;
-			h_unit = h_unit -100
-		}
-		return *this;
-	}
+  //Sammansatt tilldelning, operator-=
+  Money& Money::operator-=(const Money &rhs)
+  {
+    if(!(currency == "" || currency == rhs.currency || rhs.currency == ""))
+      {
+	throw monetary_error{"Different currency!"};
+      }
+    else if(currency == "")
+      {
+	currency == rhs.currency;
+      }
+    unit = unit - rhs.unit;
+    h_unit = h_unit - rhs.h_unit;
+    if(h_unit < 0)
+      {
+	unit--;
+	h_unit = h_unit + 100;
+      }
+    if(unit < 0)
+      {
+	throw monetary_error{"Can't operate to a value less than zero!"};
+      }
+    return *this;
+  }
 
-	//m++
-	money operator++(int)
-	{
-		money temp = *this;
-		++*this;
-		operator++();
-		return temp;	
-	}	
+  //operator-
+  Money operator-(const Money &lhs, const Money &rhs)
+  {
+    return Money{lhs}.operator-=(rhs);
+  }
 
-	// Jämförelse
-	//Lika med
-	bool money::operator == (const money& rhs) const
-	{
-		if(currency == "" || rhs.currency == "" || currency == rhs.currency)
-		{
-			if(unit == rhs.unit && h_unit == rhs.h_unit)
-			{
-				return true;
-			}
-			return false;
-		}	
-    
-		throw monetary_error{"Different currency!"};
-	}
-
-	// Mindre än
-	bool money::operator < (const money& rhs) const
-	{
-		if(currency == "" || rhs.currency == "" || currency == rhs.currency)
-		{
-			if(unit < rhs.unit || (unit == rhs.unit && h_unit < rhs.h_unit))
-			{
-				return true;
-			}
-			return false;
-		}
-		throw monetary_error{"Different currency!"};
-	}
-
-	//Utmatning
-	// Med print
-	std::ostream& money::print(std::ostream& os) const
-	{
-		if(h_unit <10)
-		{
-			os << currency << " " << unit << ".0" << h_unit << std::endl;
-		}
-		else
-		{
-			os << currency << " " << unit << "." << h_unit << std::endl;
-		}	
-    
-		return os;
-	}
-
-	//Med operator<<
-	std::ostream& operator<< (std::ostream& os, const monetary::money& rhs)
-		{
-			return rhs.print(os);
-		}	
-}
-
+} //namespace monetary
