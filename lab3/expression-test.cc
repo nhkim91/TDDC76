@@ -37,7 +37,7 @@ int main()
 
    // Resten kräver implementering av Expression_Tree-klasserna.
 
-/*
+
    Expression_Tree* t{new Plus{new Integer{7}, new Real{3.14}}};
 
    Expression e3{t};  // konstruktor som tar ett länkat uttrycksträd

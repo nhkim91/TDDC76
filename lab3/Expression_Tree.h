@@ -23,6 +23,7 @@ class Expression_Tree
 {
 public:
 	//Default-konstruktorer
+	Expression_Tree() = default;
 	virtual ~Expression_Tree() = default;
 	Expression_Tree(const Expression_Tree&) = delete;
 	
@@ -43,19 +44,35 @@ class Binary_Operator : public Expression_Tree
 {
 public:	
 	Binary_Operator(Expression_Tree* newleftNode, Expression_Tree* newrightNode)
+		: Expression_Tree(), left_val{newleftNode}, right_val{newrightNode} {}
+
+	virtual ~Binary_Operator()
 	{
-		left_val = newleftNode;
-		right_val = newrightNode;
+		delete left_val;
+		delete right_val;
 	}
-	virtual ~Binary_Operator();
 	
 protected: 	
 	Expression_Tree* left_val;
 	Expression_Tree* right_val;	
+
 };
 
+/* Operand
+*
+*/
 class Operand : public Expression_Tree
 {
+public:	
+	Operand(Expression_Tree* new_operand)
+	{
+		operand = new_operand; 
+	}
+	
+	virtual ~Operand() = default; 
+
+protected:
+	Expression_Tree* operand;	
 };
 
 class Assign : public Binary_Operator
@@ -68,8 +85,8 @@ class Assign : public Binary_Operator
 class Plus : public Binary_Operator
 { 
 public:
-	Plus(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode);
-	~Plus() = default;
+	Plus(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode) {}
+	virtual ~Plus() = default;
 	virtual long double      evaluate() const;
 };
 
@@ -93,8 +110,7 @@ class Integer : public Operand
 {
 public:	
 	Integer(int value);
-	~Integer() = default;
-	
+	virtual ~Integer() = default;
 };
 
 class Real : public Operand
