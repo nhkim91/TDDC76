@@ -1,3 +1,12 @@
+/* FILNAMN:       lab2.cc
+ * LABORATION:    lab2
+ *PROGRAMMERARE: Kim Nguyen Hoang 910112-0260 Y3.c kimng797
+ *               Kerstin Soderqvist 911006-0309 Y3.c kerso255
+ * DATUM:         2014-10-02
+ * BESKRIVNING: Program som testar klassen Money. Med hjälp av monetary.cc och monetary.h
+ *
+ */
+
 #include <iostream>
 #include <string>
 #include <stdexcept>
@@ -5,13 +14,6 @@
 
 using namespace std;
 using namespace monetary;
-
-// Hur ska main se ut?
-// Hur ska flytt tilldelningen se ut?
-// Undantagsklassen vart ska den ligga?
-//Ska man göra något mer än att bara byta namn?
-
-// Man man använda using namespace monetary ist för namespace monetary {...}
 
 int main()
 {

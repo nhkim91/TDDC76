@@ -1,3 +1,12 @@
+/* FILNAMN:       monetary.cc
+ * LABORATION:    lab2
+ *PROGRAMMERARE: Kim Nguyen Hoang 910112-0260 Y3.c kimng797
+ *               Kerstin Soderqvist 911006-0309 Y3.c kerso255
+ * DATUM:         2014-10-02
+ * BESKRIVNING: Definitioner av funktioner som används i klassen Money
+ *
+ */
+
 #include <iostream>
 #include <string>
 #include <stdexcept>
@@ -202,12 +211,6 @@ namespace monetary
 			c = is.peek();
 		}
 	}
-
-	bool newline(std::istream& is)
-	{
-		char c = is.peek();
-		return (c == '\n' || c == '\r');
-	}
 	
 	//operator>>
 	std::istream& operator>>(std::istream& is, Money& m)
@@ -221,7 +224,7 @@ namespace monetary
 		{
 			ignore_space(is);
 
-			c = is.peek();
+			c = is.peek(); // läser in nästa bokstav
 			
 			while(isalpha(c))
 			{
@@ -241,14 +244,18 @@ namespace monetary
 				ignore_space(is);
 			}
 
-			{	c = is.peek();
+			c = is.peek();
 			
-				while(isdigit(c)) // kör så länge det är en siffra
-				{
-					new_unit = new_unit * 10 + c - 48; // -48 konventerar från ascci till decimal
-					is.ignore(1);
-					c = is.peek();
-				}
+			if(c = '-')
+			{
+				throw monetary_error{"You can't make money of a negative number"}; // Antar att man bara skriver minus i början av talet
+			}
+			
+			while(isdigit(c)) // kör så länge det är en siffra
+			{
+				new_unit = new_unit * 10 + c - 48; // -48 konventerar från ascci till decimal
+				is.ignore(1);
+				c = is.peek();
 			}
 			
 			c = is.peek();
