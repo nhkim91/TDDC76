@@ -5,4 +5,8 @@
 // INKLUDERA FÖR DET SOM KOMMER ATT ANVÄNDAS I DENNA FIL!
 using namespace std;
 
-// SEPARATA DEFINITIONER FÖR FÖR EXPRESSION_TREE-KLASSERNA DEFINIERAS HÄR.
+//Plus
+long double Plus::evaluate() const
+{
+	return left_val->evaluate() + right_val->evaluate();	
+}
