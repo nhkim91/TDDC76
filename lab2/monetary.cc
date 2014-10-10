@@ -9,9 +9,9 @@ using namespace std;
 
 namespace monetary
 {
-	/*Hj‰lpfunktion som kollar, om valutan har tre bokst‰ver eller tom.
-	 *Kollar om enhetsv‰rdet ‰r mindre ‰n noll
-	 *Kollar om hundradelsv‰rdet ‰r mindre ‰n noll eller stˆrre ‰n 99
+	/*Hj√§lpfunktion som kollar, om valutan har tre bokst√§ver eller tom.
+	 *Kollar om enhetsv√§rdet √§r mindre √§n noll
+	 *Kollar om hundradelsv√§rdet √§r mindre √§n noll eller st√∂rre √§n 99
 	 */
 	void Money::check(const string& c, const int u, const int h)
 	{
@@ -44,7 +44,7 @@ namespace monetary
         check(c, u, h);
     }
 
-    // Hj‰lpfunktion: Swap
+    // Hj√§lpfunktion: Swap
     void Money::swap(Money& rhs) noexcept
     {
         std::swap(currency, rhs.currency);
@@ -63,7 +63,7 @@ namespace monetary
 */
 
     //Kopieringstilldelning
-	//Denna funktion gˆr n‰stan samma sak som flytt-tilldelning varpÂ vi inte har med den.
+	//Denna funktion g√∂r n√§stan samma sak som flytt-tilldelning varp√• vi inte har med den.
     Money& Money::operator=(const Money& rhs) &
     {
         if(currency == "" || currency == rhs.currency)
@@ -146,7 +146,7 @@ namespace monetary
         return Money {lhs}.operator-=(rhs);
     }
 
-    //J‰mfˆrelser
+    //J√§mf√∂relser
     //operator==
     bool Money::operator==(const Money& rhs) const
     {
@@ -192,7 +192,7 @@ namespace monetary
         return rhs.print(os);
     }
 
-	// Hj‰lpfunktion: tar bort alla vita tecken
+	// Hj√§lpfunktion: tar bort alla vita tecken
 
 void ignore_space(istream& is)
 {
@@ -218,14 +218,14 @@ void ignore_space(istream& is)
 
             while(isalpha(c))
             {
-                new_currency += toupper(c); // S‰tter in bokst‰ver sist i stringen
+                new_currency += toupper(c); // S√§tter in bokst√§ver sist i stringen
                 is.ignore(1);
                 c = is.peek();
             }
 
             c = is.peek();
 
-            if(c != ' ' && !new_currency.empty()) // forts‰tter om det ‰r ett mellanrum, annars avslutas programmet.
+            if(c != ' ' && !new_currency.empty()) // forts√§tter om det √§r ett mellanrum, annars avslutas programmet.
             {
                 break;
             }
@@ -246,7 +246,7 @@ void ignore_space(istream& is)
                 throw monetary_error{"You need to enter some value!"};
             }
 
-            while(isdigit(c)) // kˆr sÂ l‰nge det ‰r en siffra
+            while(isdigit(c)) // k√∂r s√• l√§nge det √§r en siffra
             {
                 new_unit = new_unit * 10 + atoi(&c);
                 is.ignore(1);
@@ -294,7 +294,7 @@ void ignore_space(istream& is)
 		    }
             break;
 		}
-		m.check(new_currency, new_unit, new_h_unit); // Ser till att det ‰r 3 bokst‰ver
+		m.check(new_currency, new_unit, new_h_unit); // Ser till att det √§r 3 bokst√§ver
 
 		return is;
 	}
@@ -346,7 +346,7 @@ void ignore_space(istream& is)
     return temp;
   }
 
-  //Labbeskrivningens currency(), som vi namngett get_currency p.g.a. att vi anv‰nder 'currency' som variabel. Tar fram 'currency'.
+  //Labbeskrivningens currency(), som vi namngett get_currency p.g.a. att vi anv√§nder 'currency' som variabel. Tar fram 'currency'.
   string Money::get_currency() const
   {
     return currency;

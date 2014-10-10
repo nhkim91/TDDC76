@@ -11,13 +11,10 @@ int main()
    // Ska inte vara möjligt - Expression_Tree ska vara abstrakt:
    // Expression_Tree* t0{new Expression_Tree};
 
-	Expression_Tree* t1{ new Plus{ new Integer{7}, new Integer{3} } };
-	
-	cout<< t1 << endl;
 
- /*  
-   Expression_Tree* t1{ new Plus{ new Integer{7}, new Real{3.14} } };
-
+   
+   Expression_Tree* t1{new Plus{ new Integer{7}, new Integer{3} } };
+/*
    try
    {
       cout << "t1->evaluate() = " << t1->evaluate() << '\n';

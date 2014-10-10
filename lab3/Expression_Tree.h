@@ -11,10 +11,20 @@
  * expression_error: kastas om ett fel inträffar i en Expression-operation;
  * ett diagnostiskt meddelande ska skickas med.
  */
-// ATT GÖRA!
 
+/*
+ *Undantagsklass
+ */
+class monetary_error: public std::logic_error
+{
+public:
+    explicit monetary_error(const std::string& what_arg) noexcept
+        :std::logic_error(what_arg) {}
 
-// OBSERVERA: NEDANSTÅENDE ÄR ENDAST KODSKELETT - MODIFIERA OCH KOMPLETTERA!
+    explicit monetary_error(const char* what_arg) noexcept
+        :std::logic_error(what_arg) {}
+};
+
 
 /*
  * Expression_Tree: Abstrakt, polymorf basklass för alla trädnodklasser.
@@ -43,19 +53,20 @@ public:
 class Binary_Operator : public Expression_Tree
 {
 public:	
-	Binary_Operator(Expression_Tree* newleftNode, Expression_Tree* newrightNode)
-		: Expression_Tree(), left_val{newleftNode}, right_val{newrightNode} {}
-
+	virtual long double      evaluate() const override = 0;
 	virtual ~Binary_Operator()
 	{
 		delete left_val;
 		delete right_val;
 	}
 	
+	Binary_Operator(Expression_Tree* newleftNode, Expression_Tree* newrightNode, std::string str)
+		: Expression_Tree(), left_val{newleftNode}, right_val{newrightNode}, _str(str) {}
+	
 protected: 	
 	Expression_Tree* left_val;
-	Expression_Tree* right_val;	
-
+	Expression_Tree* right_val;
+	std::string _str{""};	
 };
 
 /* Operand
@@ -64,12 +75,9 @@ protected:
 class Operand : public Expression_Tree
 {
 public:	
-	Operand(Expression_Tree* new_operand)
-	{
-		operand = new_operand; 
-	}
-	
-	virtual ~Operand() = default; 
+	Operand() = default;
+	virtual ~Operand() = default;
+	Operand(Expression_Tree* new_operand) : Expression_Tree(), operand{new_operand} {}	
 
 protected:
 	Expression_Tree* operand;	
@@ -85,9 +93,11 @@ class Assign : public Binary_Operator
 class Plus : public Binary_Operator
 { 
 public:
-	Plus(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode) {}
+	Plus() = default;
 	virtual ~Plus() = default;
-	virtual long double      evaluate() const;
+	virtual long double evaluate() const override;
+	Plus(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "+") {}
+	
 };
 
 class Minus : public Binary_Operator 
@@ -109,16 +119,34 @@ class Power: public Binary_Operator
 class Integer : public Operand
 {
 public:	
-	Integer(int value);
 	virtual ~Integer() = default;
+	Integer(long int value = 0) : Operand() , _value{value} {}
+	long double evaluate() const override {return _value;}
+
+private:
+	long int _value{0};	
 };
 
 class Real : public Operand
 {
+public:
+	virtual ~Real() = default;
+	Real(long double value = 0) : Operand(), _value{value} {}
+	
+private:
+	long double _value{0}; 	
 };
 
 class Variable : public Operand
 {
+public:
+	Variable() = default;
+	virtual ~Variable() = default;
+	Variable(std::string str) : Operand(), _str{str} {}
+private:
+	std::string _str {""};
+	
+	
 };
 
 #endif

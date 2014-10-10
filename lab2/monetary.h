@@ -26,7 +26,7 @@ private:
     int h_unit {0};
 
     void swap(Money&) noexcept;
-    void check(const std::string&, const int, const int); //Kollar att allt stÂr r‰tt till, ex Att currency har tre bokst‰ver
+    void check(const std::string&, const int, const int); //Kollar att allt st√•r r√§tt till, ex Att currency har tre bokst√§ver
     void ignore_space(std::istream&); // Tar bort vita tecken
 
 public:
@@ -50,7 +50,7 @@ public:
     //Flytt-tilldelning.
     Money& operator=(Money&&) &;
 
-    //J‰mfˆrelser
+    //J√§mf√∂relser
     bool operator==(const Money&) const;
     bool operator!=(const Money &rhs) const {return !(*this == rhs);}
     bool operator<(const Money&) const;
@@ -70,7 +70,7 @@ public:
     Money& operator++(); //++m
     Money operator++(int); //m++
 
-    //currency(), fast vÂr heter get_currency() eftersom vÂr variabel heter 'currency'.
+    //currency(), fast v√•r heter get_currency() eftersom v√•r variabel heter 'currency'.
     std::string get_currency() const;
 
     //Stegning --

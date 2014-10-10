@@ -3,7 +3,7 @@
  *PROGRAMMERARE: Kim Nguyen Hoang 910112-0260 Y3.c kimng797
  *               Kerstin Soderqvist 911006-0309 Y3.c kerso255
  * DATUM:         2014-10-02
- * BESKRIVNING: Program som testar klassen Money. Med hjälp av monetary.cc och monetary.h
+ * BESKRIVNING: Program som testar klassen Money. Med hjÃ¤lp av monetary.cc och monetary.h
  *
  */
 
@@ -34,7 +34,7 @@ int main()
 	Money m13;
 
     cout << "Test av print() och operator<<:" << endl;
-        m5.print(cout); // Utskrift: SEK 10.00 (utan efterföljande ny rad)
+        m5.print(cout); // Utskrift: SEK 10.00 (utan efterfÃ¶ljande ny rad)
         cout << endl << m5 << endl; // Utskrift: SEK 10.00
         cout << m3 << endl << endl; // Utskrift: 10.50
 
@@ -45,16 +45,16 @@ int main()
         cout << m4 << endl ;
 
         cout << "Borde bli 'SEK 10.50': ";
-        m4 = m3; // Okej, m3 är av ospecificerad valuta (m4 behåller aktuell valutaenhet)
+        m4 = m3; // Okej, m3 Ã¤r av ospecificerad valuta (m4 behÃ¥ller aktuell valutaenhet)
         cout << m4 << endl << endl;
 
         cout << "Borde bli 'FFR 100.50': ";
-        m1 = m6; // Okej, m1, som var ospecificerad, erhåller FFR som valutaenhet, förutom beloppet
+        m1 = m6; // Okej, m1, som var ospecificerad, erhÃ¥ller FFR som valutaenhet, fÃ¶rutom beloppet
         cout << m1 << endl;
 
 		try
         {
-			m4 = m6; // Fel, en specificerad valuta får ej ändras! (m4 är SEK, m6 är FFR)
+			m4 = m6; // Fel, en specificerad valuta fÃ¥r ej Ã¤ndras! (m4 Ã¤r SEK, m6 Ã¤r FFR)
 		}
 		catch (const monetary_error& e)
 		{
@@ -75,7 +75,7 @@ int main()
 		cout<< e.what() << endl << endl;
 	}
 
-    cout << "Test av jämförelser:" << endl;
+    cout << "Test av jÃ¤mfÃ¶relser:" << endl;
 
 	cout  <<  m4 << " < " << m5 << " -> ";
     if(m4 < m5)
@@ -106,9 +106,9 @@ int main()
 
     cout << "Test av stegning ++" << endl;
 
-	cout << "m6 är: " << m6 << ", ++m6 ger: " << ++m6 << endl;
-	cout << "m9 är: " << m9 << ", m9++ ger: " << m9++
-		<< ". Efteråt är m9: " << m9 << endl << endl;
+	cout << "m6 Ã¤r: " << m6 << ", ++m6 ger: " << ++m6 << endl;
+	cout << "m9 Ã¤r: " << m9 << ", m9++ ger: " << m9++
+		<< ". EfterÃ¥t Ã¤r m9: " << m9 << endl << endl;
 
     cout<< "Test av currency()" <<endl;
 
@@ -136,9 +136,9 @@ int main()
 
     cout << "Test av stegning --" << endl;
 
-	cout << "m6 är: " << m6 << ", --m6 ger: " << --m6 << endl;
-	cout << "m9 är: " << m9 << ", m9-- ger: " << m9--
-		<< ". Efteråt är m9: " << m9 << endl << endl;
+	cout << "m6 Ã¤r: " << m6 << ", --m6 ger: " << --m6 << endl;
+	cout << "m9 Ã¤r: " << m9 << ", m9-- ger: " << m9--
+		<< ". EfterÃ¥t Ã¤r m9: " << m9 << endl << endl;
 
     cout << "Test av sammansatt tilldelning, operator-=" << endl;
 
