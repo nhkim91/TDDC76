@@ -1,12 +1,3 @@
-/* FILNAMN:       monetary.h
- * LABORATION:    lab2
- *PROGRAMMERARE: Kim Nguyen Hoang 910112-0260 Y3.c kimng797
- *               Kerstin Soderqvist 911006-0309 Y3.c kerso255
- * DATUM:         2014-10-02
- * BESKRIVNING: Filen innehåller deklarationer för klassen Money samt klassen för undantag.
- *
- */
-
 #ifndef MONETARY_H
 #define MONETARY_H
 
@@ -45,10 +36,10 @@ public:
     Money(const std::string &c, const int u=0, const int h=0);
 
     //Kopieringskonstruktor.
-    Money(const Money&);
+    Money(const Money&) = default;
 
     //Flyttkonstruktor.
-    Money(Money&&) noexcept;
+    Money(Money&&) noexcept = default;
 
     //Destruktor.
     ~Money() = default;
@@ -63,7 +54,7 @@ public:
     bool operator==(const Money&) const;
     bool operator!=(const Money &rhs) const {return !(*this == rhs);}
     bool operator<(const Money&) const;
-    bool operator>(const Money &rhs) const {return !(*this < rhs);}
+    bool operator>(const Money &rhs) const {return !(*this < rhs || *this == rhs);}
     bool operator<=(const Money &rhs) const {return (*this < rhs || *this == rhs);}
     bool operator>=(const Money &rhs) const {return !(*this < rhs);}
 

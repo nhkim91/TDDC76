@@ -1,16 +1,8 @@
-/* FILNAMN:       monetary.cc
- * LABORATION:    lab2
- *PROGRAMMERARE: Kim Nguyen Hoang 910112-0260 Y3.c kimng797
- *               Kerstin Soderqvist 911006-0309 Y3.c kerso255
- * DATUM:         2014-10-02
- * BESKRIVNING: Definitioner av funktioner som används i klassen Money
- *
- */
-
 #include <iostream>
 #include <string>
 #include <stdexcept>
 #include <cctype>
+#include <cstdlib>
 #include "monetary.h"
 
 using namespace std;
@@ -61,16 +53,17 @@ namespace monetary
     }
 
     //Kopieringskonstruktor
-    Money::Money(const Money &m): currency(m.currency), unit(m.unit), h_unit(m.h_unit){}
+//    Money::Money(const Money &m): currency(m.currency), unit(m.unit), h_unit(m.h_unit){}
 
     //Flyttkonstruktor
-    Money::Money(Money&& m) noexcept
+/*    Money::Money(Money&& m) noexcept
     {
         swap(m);
     }
+*/
 
     //Kopieringstilldelning
-	//Denna funktion gör nästan samma sak som flytt-tilldelning varpå vi inte har med den. 
+	//Denna funktion gör nästan samma sak som flytt-tilldelning varpå vi inte har med den.
     Money& Money::operator=(const Money& rhs) &
     {
         if(currency == "" || currency == rhs.currency)
@@ -200,18 +193,15 @@ namespace monetary
     }
 
 	// Hjälpfunktion: tar bort alla vita tecken
-	void ignore_space(istream& is)
-	{
-		char c = is.peek();
 
-		//while(c = is.peek() && isspace(c) && c != 10 && c != 13)
-		while(c == ' ' || c == '\t')
-		{
-			is.ignore(1);
-			c = is.peek();
-		}
-	}
-	
+void ignore_space(istream& is)
+{
+    while(!(is >> ws))
+    {
+        break;
+    }
+}
+
 	//operator>>
 	std::istream& operator>>(std::istream& is, Money& m)
 	{
@@ -222,126 +212,144 @@ namespace monetary
 
 		while(is.good())
 		{
-			ignore_space(is);
+		    ignore_space(is);
 
-			c = is.peek(); // läser in nästa bokstav
-			
-			while(isalpha(c))
-			{
-				new_currency += toupper(c); // Sätter in bokstäver sist i stringen
-				is.ignore(1);
-				c = is.peek();
-			}
+            c = is.peek();
 
-			c = is.peek();
-			
-			if(c != ' ' && !new_currency.empty()) // fortsätter om det är ett mellanrum, annars avslutas programmet.
-			{	
-				break;
-			}
-			else
-			{
-				ignore_space(is);
-			}
+            while(isalpha(c))
+            {
+                new_currency += toupper(c); // Sätter in bokstäver sist i stringen
+                is.ignore(1);
+                c = is.peek();
+            }
 
-			c = is.peek();
-			
-			if(c = '-')
-			{
-				throw monetary_error{"You can't make money of a negative number"}; // Antar att man bara skriver minus i början av talet
-			}
-			
-			while(isdigit(c)) // kör så länge det är en siffra
-			{
-				new_unit = new_unit * 10 + c - 48; // -48 konventerar från ascci till decimal
-				is.ignore(1);
-				c = is.peek();
-			}
-			
-			c = is.peek();
-			
-			if(c == '.')
-			{
-				is.ignore (1);
+            c = is.peek();
 
-				c = is.peek();
-				
-				if(isdigit(c))	// kör så länge det är en siffra
-				{
-					for(int i = 0; i < 2; ++i) // Ser till att det bara är två decimaler
-					{
-						new_h_unit = new_h_unit * 10 + c -48; // -48 konventerar från ascci till decimal
-						is.ignore(1);
-						c = is.peek();
-						if(!isdigit(c))
-						{
-							new_h_unit = 0;
-						}
-					}
-				}
-			}
-			else
-			{
-				break;
-			}
-			break;
+            if(c != ' ' && !new_currency.empty()) // fortsätter om det är ett mellanrum, annars avslutas programmet.
+            {
+                break;
+            }
+            else
+            {
+                ignore_space(is);
+            }
+
+            c = is.peek();
+
+            if(c == '-')
+            {
+                throw monetary_error{"You can't make money of a negative number!"};
+            }
+
+            else if(c == '.')
+            {
+                throw monetary_error{"You need to enter some value!"};
+            }
+
+            while(isdigit(c)) // kör så länge det är en siffra
+            {
+                new_unit = new_unit * 10 + atoi(&c);
+                is.ignore(1);
+                c = is.peek();
+            }
+
+            c = is.peek();
+
+            if(c == '.')
+            {
+                is.ignore (1);
+
+                c = is.peek();
+
+                if(isdigit(c))
+                {
+                    new_h_unit = atoi(&c);
+                    is.ignore(1);
+                }
+                else
+                {
+                    throw monetary_error{"You need to enter two decimals!"};
+                }
+
+                c = is.peek();
+
+                if(isdigit(c))
+                {
+                    new_h_unit = new_h_unit * 10 + atoi(&c);
+
+                }
+                else if(!isdigit(c) && new_currency.empty())
+                {
+                    new_h_unit = new_h_unit * 10;
+                }
+                else
+                {
+                    throw monetary_error{"You need to enter two decimals!"};
+                }
+
+		    }
+            else
+		    {
+		        break;
+		    }
+            break;
 		}
-		m.check(new_currency, new_unit, new_h_unit); // Ser till att det är 3 bokstäver 
+		m.check(new_currency, new_unit, new_h_unit); // Ser till att det är 3 bokstäver
 
 		return is;
 	}
 
-    //Stegning ++
-    //++m
-    Money& Money::operator++()
-    {
-        ++h_unit;
+  //Stegning ++
+  //++m
+  Money& Money::operator++()
+  {
+    ++h_unit;
 
-        if(h_unit > 99)
-        {
-            ++unit;
-            h_unit = h_unit - 100;
-        }
-        return *this;
-    }
+    if(h_unit > 99)
+      {
+	++unit;
+	h_unit = h_unit - 100;
+      }
+    return *this;
+  }
 
-    //m++
-    Money Money::operator++(int)
-    {
-        Money temp = *this;
-        operator++();
-        return temp;
-    }
+  //m++
+  Money Money::operator++(int)
+  {
+    Money temp = *this;
+    operator++();
+    return temp;
+  }
 
-	//--m
-    Money& Money::operator--()
-    {
-        --h_unit;
+  //--m
+  Money& Money::operator--()
+  {
+    --h_unit;
 
-        if(h_unit < 0)
-        {
-            --unit;
-            h_unit = h_unit + 100;
-            if(unit < 0)
-            {
-                throw monetary_error {"Can't operate to a value less than zero!"};
-            }
-        }
-        return *this;
-    }
+    if(h_unit < 0)
+      {
+	--unit;
+	h_unit = h_unit + 100;
+	if(unit < 0)
+	  {
+	    throw monetary_error {"Can't operate to a value less than zero!"};
+	  }
+      }
+    return *this;
+  }
 
-    //m--
-    Money Money::operator--(int)
-    {
-        Money temp = *this;
-        operator--();
-        return temp;
-    }
+  //m--
+  Money Money::operator--(int)
+  {
+    Money temp = *this;
+    operator--();
+    return temp;
+  }
 
-    //Labbeskrivningens currency(), som vi namngett get_currency p.g.a. att vi använder 'currency' som variabel. Tar fram 'currency'.
-    string Money::get_currency() const
-    {
-        return currency;
-    }
+  //Labbeskrivningens currency(), som vi namngett get_currency p.g.a. att vi använder 'currency' som variabel. Tar fram 'currency'.
+  string Money::get_currency() const
+  {
+    return currency;
+  }
 } //namespace monetary
 
