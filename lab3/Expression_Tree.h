@@ -12,16 +12,17 @@
  * ett diagnostiskt meddelande ska skickas med.
  */
 
+ 
 /*
  *Undantagsklass
  */
-class monetary_error: public std::logic_error
+class tree_error: public std::logic_error
 {
 public:
-    explicit monetary_error(const std::string& what_arg) noexcept
+    explicit tree_error(const std::string& what_arg) noexcept
         :std::logic_error(what_arg) {}
 
-    explicit monetary_error(const char* what_arg) noexcept
+    explicit tree_error(const char* what_arg) noexcept
         :std::logic_error(what_arg) {}
 };
 
@@ -97,7 +98,7 @@ public:
 	virtual ~Plus() = default;
 	virtual long double evaluate() const override;
 	Plus(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "+") {}
-	
+	//Plus(Expression_Tree* newleftNode, Expression_Tree* newrightNode);	
 };
 
 class Minus : public Binary_Operator 

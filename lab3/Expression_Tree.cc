@@ -21,5 +21,4 @@ long double Plus::evaluate() const
 	return (left_val->evaluate() + right_val->evaluate());	
 }
 
-
 //Integer

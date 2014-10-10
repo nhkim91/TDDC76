@@ -12,8 +12,7 @@ int main()
    // Expression_Tree* t0{new Expression_Tree};
 
 
-   
-   Expression_Tree* t1{new Plus{ new Integer{7}, new Integer{3} } };
+	Expression_Tree* t1{new Plus{ new Integer{7}, new Integer{3} } };
 /*
    try
    {
