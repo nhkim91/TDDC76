@@ -9,6 +9,7 @@
 
 
 #include <iostream>
+#include <ios>
 #include <string>
 #include <stdexcept>
 #include "monetary.h"
@@ -173,15 +174,12 @@ int main()
 	try
 	{
 		cin >> m;
+        cout << m << endl;
 	}
 	catch(const monetary_error& e)
 	{
 		cout<< e.what() << endl << endl;
 	}
 
-	cout << m << endl;
-
-    return 0;
 }
-
 
