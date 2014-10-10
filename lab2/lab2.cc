@@ -7,6 +7,7 @@
  *
  */
 
+
 #include <iostream>
 #include <string>
 #include <stdexcept>
@@ -31,14 +32,14 @@ int main()
 	Money m11 {"SEK", 10, 10};
 	Money m12 {"FFR", 10};
 	Money m13;
- 
+
     cout << "Test av print() och operator<<:" << endl;
         m5.print(cout); // Utskrift: SEK 10.00 (utan efterföljande ny rad)
         cout << endl << m5 << endl; // Utskrift: SEK 10.00
         cout << m3 << endl << endl; // Utskrift: 10.50
 
     cout << "Test av (kopierings)tilldelning (operator=):" << endl;
-    
+
         cout << "Borde bli 'SEK 10.00': ";
         m4 = m5; // Okej, samma valuta
         cout << m4 << endl ;
@@ -50,7 +51,7 @@ int main()
         cout << "Borde bli 'FFR 100.50': ";
         m1 = m6; // Okej, m1, som var ospecificerad, erhåller FFR som valutaenhet, förutom beloppet
         cout << m1 << endl;
-		
+
 		try
         {
 			m4 = m6; // Fel, en specificerad valuta får ej ändras! (m4 är SEK, m6 är FFR)
@@ -58,13 +59,13 @@ int main()
 		catch (const monetary_error& e)
 		{
 			cout<< e.what() << endl << endl;
-		}	
-   
+		}
+
     cout << "Test av operator+:" << endl;
 
     cout  <<  m4 << " + " << m5 << " = " << m4+m5 << endl;
     cout  <<  m4 << " + " << m10 << " = " << m4+m10 << endl;
-	
+
 	try
 	{
 	 m4 + m6;
@@ -75,7 +76,7 @@ int main()
 	}
 
     cout << "Test av jämförelser:" << endl;
-	
+
 	cout  <<  m4 << " < " << m5 << " -> ";
     if(m4 < m5)
       {
@@ -83,7 +84,7 @@ int main()
       }
     else
       cout << "False" << endl;
-	
+
 	cout  <<  m4 << " != " << m3 << " -> ";
     if(m4 != m3)
       {
@@ -104,18 +105,18 @@ int main()
 	}
 
     cout << "Test av stegning ++" << endl;
- 
+
 	cout << "m6 är: " << m6 << ", ++m6 ger: " << ++m6 << endl;
 	cout << "m9 är: " << m9 << ", m9++ ger: " << m9++
 		<< ". Efteråt är m9: " << m9 << endl << endl;
 
     cout<< "Test av currency()" <<endl;
-	
+
     string valuta{m4.get_currency()};
     cout << "m4 har valutan: " << valuta << endl << endl;
 
 	cout << "Test av operator+=" << endl;
-	
+
       cout << "m4: " << m4 << " och m5: " << m5 << endl;
       m4 += m5;
       cout << "m4 efter +=: " << m4 << " och m5 efter +=: " << m5 << endl;
@@ -123,7 +124,7 @@ int main()
       cout << "m3: " << m3 << " och m5: " << m5 << endl;
       m3 += m5;
       cout << "m3 efter +=: " << m3 << " och m5 efter +=: " << m5 << endl;
-	  
+
 	  try
 	  {
 		m11+=m12;
@@ -134,13 +135,13 @@ int main()
 	}
 
     cout << "Test av stegning --" << endl;
- 
+
 	cout << "m6 är: " << m6 << ", --m6 ger: " << --m6 << endl;
 	cout << "m9 är: " << m9 << ", m9-- ger: " << m9--
 		<< ". Efteråt är m9: " << m9 << endl << endl;
-    
+
     cout << "Test av sammansatt tilldelning, operator-=" << endl;
-    
+
     try
 	{
 		m13 -= m5;
@@ -150,24 +151,24 @@ int main()
 		cout<< e.what() << endl << endl;
 	}
 
-    
+
     cout << "m3: " << m3 << " och m5: " << m5 << endl;
     m3 -= m5;
     cout << "m3 efter -=: " << m3 << " och m5: " << m5 << endl << endl;
-    
+
 	cout << "Test av operator-" << endl;
-    
+
     cout << "m3: " << m3 << " och m5: " << m5 << " m3-m5: " << m3 - m5 << endl;
-  
-   try 
+
+   try
 	{
 		m3 - m6;
-	}	
+	}
 		catch(const monetary_error& e)
 	{
 		cout<< e.what() << endl << endl;
 	}
-	
+
 	cout << "Test operator>>" << endl;
 	try
 	{
@@ -177,9 +178,9 @@ int main()
 	{
 		cout<< e.what() << endl << endl;
 	}
-	
+
 	cout << m << endl;
-	
+
     return 0;
 }
 
