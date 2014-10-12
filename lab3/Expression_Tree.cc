@@ -9,6 +9,10 @@
 
 using namespace std;
 
+// TODO: Gör klart print, Assign, set_value och get_value.
+// Fråga: Hur ska set_value, get_value och evaluate() Variable fungera?
+// Tips på hur man gör print
+
 //-*-*-*-*- Binary_Operator str() -*-*-*-*-
 string Binary_Operator::get_postfix() const
 {
