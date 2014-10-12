@@ -12,9 +12,11 @@ int main()
    // Expression_Tree* t0{new Expression_Tree};
 
 
-	Expression_Tree* t1{new Plus{ new Integer{7}, new Integer{3} } };
+    Expression_Tree* t1{new Plus{ new Integer{7}, new Real{3.13} } };
+    cout<<t1<<endl;
 /*
    try
+   
    {
       cout << "t1->evaluate() = " << t1->evaluate() << '\n';
    }
