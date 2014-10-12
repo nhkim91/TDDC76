@@ -12,9 +12,10 @@ int main()
    // Expression_Tree* t0{new Expression_Tree};
 
 
-    Expression_Tree* t1{new Plus{ new Integer{7}, new Real{3.13} } };
-    cout<<t1<<endl;
-/*
+    Expression_Tree* t1{new Plus{ new Integer{7}, new Real{3.14} } }; // Hur ska Real se ut?
+    t1->print(cout);
+    cout << "=" << t1->evaluate();
+    cout<<endl;
    try
    
    {
@@ -26,9 +27,9 @@ int main()
    }
 
    cout << "t1->get_postfix() = " << t1->get_postfix() << '\n';
-   cout << "t1->str() = " << t1->str() << "\n\n";
+   //cout << "t1->str() = " << t1->str() << "\n\n";
 
-   Expression_Tree* t2{ ct1->clone() };
+   Expression_Tree* t2{ t1->clone() };
 
    try
    {
@@ -40,7 +41,7 @@ int main()
    }
    cout << "t2->get_postfix() = " << t2->get_postfix() << '\n';
    cout << "t2->str() = " << t2->str() << "\n\n";
-*/
+
 
    return 0;
 }
