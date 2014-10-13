@@ -6,6 +6,7 @@
 #include <string>
 #include <cmath>
 #include <cctype>
+#include <iomanip>
 
 using namespace std;
 
@@ -25,14 +26,23 @@ string Binary_Operator::str() const
 
 void Binary_Operator::print(ostream& os) const
 {
+    int depth = 3;
+
+    os << setw(depth+3);
     left_val->print(os);
-    os << _str;
+    os << endl << setw(depth+1) << "/" << endl;
+    os << setw(depth)<< _str << endl;
+    os << setw(depth+1) << "\\" << endl;
+    os << setw(depth+4);
     right_val->print(os);
+    os << endl;
 }
 
 //-*-*-*-*- Assign -*-*-*-*-
-Assign::Assign(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "=")
+Assign::Assign(Expression_Tree* newleftNode, Expression_Tree* newrightNode)
+    : Binary_Operator(newleftNode, newrightNode, "=")
 {
+
     if (!(isalpha(newleftNode->str()[0] && newleftNode->str().size() == 1)))
     {
         throw expression_error("You need to enter a variable to the left of = ");
@@ -44,7 +54,7 @@ long double Assign::evaluate() const
     long double new_val{right_val->evaluate()};
     leftNode->set_value(new_val);
 
-    return leftNode->str()[0] = new_val;
+    return leftNode->get_value();
 }
 
 Expression_Tree* Assign::clone() const

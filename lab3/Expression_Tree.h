@@ -215,12 +215,11 @@ public:
     long double get_value() const;
     void set_value(double new_val);
 
-    Variable(std::string str) : Operand(), _str {str} {}
+    Variable(std::string str) : Operand(), _str {str}{}
 
 private:
     std::string _str {""};
     long double _value{0};
-    std::string var_name {""};
 };
 
 #endif
