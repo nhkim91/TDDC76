@@ -219,6 +219,8 @@ public:
 
 private:
     std::string _str {""};
+    long double _value{0};
+    std::string var_name {""};
 };
 
 #endif

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ios>
 #include <string>
 #include <stdexcept>
 #include <cctype>
@@ -9,347 +10,342 @@ using namespace std;
 
 namespace monetary
 {
-	/*Hjälpfunktion som kollar, om valutan har tre bokstäver eller tom.
-	 *Kollar om enhetsvärdet är mindre än noll
-	 *Kollar om hundradelsvärdet är mindre än noll eller större än 99
-	 */
-	void Money::check(const string& c, const int u, const int h)
-	{
-		if(!(c == "" || c.size() == 3))
-		{
-			throw monetary_error{"Can't create money if currency doesn't have 3 characters e.g SEK!"};
-		}
-		else if( u < 0 || h < 0)
-		{
-			throw monetary_error{"You can't create money with a negative value!"};
-		}
-		else if(h > 99)
-		{
-			throw monetary_error{"Cent must be less then 100!"};
-		}
-
-		currency = c;
-		unit = u;
-		h_unit = h;
-	}
-
-	// Initiering
-    Money::Money(const int u, const int h)
+/*Hjälpfunktion som kollar, om valutan har tre bokstäver eller tom.
+ *Kollar om enhetsvärdet är mindre än noll
+ *Kollar om hundradelsvärdet är mindre än noll eller större än 99
+ */
+void Money::check(const string& c, const int u, const int h)
+{
+    if (!(c == "" || c.size() == 3))
     {
-        check("",u ,h);
+        throw monetary_error {"Can't create money if currency doesn't have 3 characters e.g SEK!"};
+    }
+    else if (u < 0 || h < 0)
+    {
+        throw monetary_error {"You can't create money with a negative value!"};
+    }
+    else if (h > 99)
+    {
+        throw monetary_error {"Cent must be less then 100!"};
     }
 
-    Money::Money(const string& c, const int u, const int h)
-    {
-        check(c, u, h);
-    }
+    currency = c;
+    unit = u;
+    h_unit = h;
+}
 
-    // Hjälpfunktion: Swap
-    void Money::swap(Money& rhs) noexcept
-    {
-        std::swap(currency, rhs.currency);
-        std::swap(unit, rhs.unit);
-        std::swap(h_unit, rhs.h_unit);
-    }
+// Initiering
+Money::Money(const int u, const int h)
+{
+    check("", u , h);
+}
 
-    //Kopieringskonstruktor
+Money::Money(const string& c, const int u, const int h)
+{
+    check(c, u, h);
+}
+
+// Hjälpfunktion: Swap
+void Money::swap(Money& rhs) noexcept
+{
+    std::swap(currency, rhs.currency);
+    std::swap(unit, rhs.unit);
+    std::swap(h_unit, rhs.h_unit);
+}
+
+//Kopieringskonstruktor
 //    Money::Money(const Money &m): currency(m.currency), unit(m.unit), h_unit(m.h_unit){}
 
-    //Flyttkonstruktor
+//Flyttkonstruktor
 /*    Money::Money(Money&& m) noexcept
     {
         swap(m);
     }
 */
 
-    //Kopieringstilldelning
-	//Denna funktion gör nästan samma sak som flytt-tilldelning varpå vi inte har med den.
-    Money& Money::operator=(const Money& rhs) &
+//Kopieringstilldelning
+//Denna funktion gör nästan samma sak som flytt-tilldelning varpå vi inte har med den.
+Money& Money::operator=(const Money& rhs) &
+{
+    if (currency == "" || currency == rhs.currency)
     {
-        if(currency == "" || currency == rhs.currency)
-        {
-            currency = rhs.currency;
-            unit = rhs.unit;
-            h_unit = rhs.h_unit;
-        }
-        else if(rhs.currency == "")
-        {
-            unit = rhs.unit;
-            h_unit = rhs.h_unit;
-        }
-        else
-        {
-            throw monetary_error{"Different currency!"};
-        }
-        return *this;
+        currency = rhs.currency;
+        unit = rhs.unit;
+        h_unit = rhs.h_unit;
     }
-
-	//Sammansatt tilldelning
-	// operator+=
-    Money& Money::operator+=(const Money& rhs)
+    else if (rhs.currency == "")
     {
-        if(!(currency == "" || currency == rhs.currency || rhs.currency == ""))
-        {
-            throw monetary_error {"Different currency!"};
-            // return *this;
-        }
-        else if(currency == "")
-        {
-            currency = rhs.currency;
-        }
-        unit = unit + rhs.unit;
-        h_unit = h_unit + rhs.h_unit;
-
-        if(h_unit > 99)
-        {
-            unit++;
-            h_unit = h_unit - 100;
-        }
-        return *this;
+        unit = rhs.unit;
+        h_unit = rhs.h_unit;
     }
-
-	//operator-=
-    Money& Money::operator-=(const Money& rhs)
+    else
     {
-        if(!(currency == "" || currency == rhs.currency || rhs.currency == ""))
-        {
-            throw monetary_error {"Different currency!"};
-        }
-        else if(currency == "")
-        {
-            currency == rhs.currency;
-        }
-        unit = unit - rhs.unit;
-        h_unit = h_unit - rhs.h_unit;
-
-        if(h_unit < 0)
-        {
-            unit--;
-            h_unit = h_unit + 100;
-        }
-        if(unit < 0)
-        {
-            throw monetary_error {"Can't operate to a value less than zero!"};
-        }
-        return *this;
+        throw monetary_error{"Different currency!"};
     }
+    return *this;
+}
 
-    //operator+
-    Money operator+(const Money& lhs, const Money& rhs)
+//Sammansatt tilldelning
+// operator+=
+Money& Money::operator+=(const Money& rhs)
+{
+    if (!(currency == "" || currency == rhs.currency || rhs.currency == ""))
     {
-        return Money {lhs}.operator+=(rhs);
+        throw monetary_error {"Different currency!"};
+        // return *this;
     }
-
-	//operator-
-    Money operator-(const Money &lhs, const Money &rhs)
+    else if (currency == "")
     {
-        return Money {lhs}.operator-=(rhs);
+        currency = rhs.currency;
     }
+    unit = unit + rhs.unit;
+    h_unit = h_unit + rhs.h_unit;
 
-    //Jämförelser
-    //operator==
-    bool Money::operator==(const Money& rhs) const
+    if (h_unit > 99)
     {
-        if(currency == "" || rhs.currency == "" || currency == rhs.currency)
-        {
-            if(unit == rhs.unit && h_unit == rhs.h_unit)
-            {
-                return true;
-            }
-            return false;
-        }
+        unit++;
+        h_unit = h_unit - 100;
+    }
+    return *this;
+}
+
+//operator-=
+Money& Money::operator-=(const Money& rhs)
+{
+    if (!(currency == "" || currency == rhs.currency || rhs.currency == ""))
+    {
         throw monetary_error {"Different currency!"};
     }
-
-    //operator<
-    bool Money::operator<(const Money& rhs) const
+    else if (currency == "")
     {
-        if(currency == "" || rhs.currency == "" || currency == rhs.currency)
+        currency == rhs.currency;
+    }
+    unit = unit - rhs.unit;
+    h_unit = h_unit - rhs.h_unit;
+
+    if (h_unit < 0)
+    {
+        unit--;
+        h_unit = h_unit + 100;
+    }
+    if (unit < 0)
+    {
+        throw monetary_error {"Can't operate to a value less than zero!"};
+    }
+    return *this;
+}
+
+//operator+
+Money operator+(const Money& lhs, const Money& rhs)
+{
+    return Money {lhs} .operator += (rhs);
+}
+
+//operator-
+Money operator-(const Money &lhs, const Money &rhs)
+{
+    return Money {lhs} .operator -= (rhs);
+}
+
+//Jämförelser
+//operator==
+bool Money::operator==(const Money& rhs) const
+{
+    if (currency == "" || rhs.currency == "" || currency == rhs.currency)
+    {
+        if (unit == rhs.unit && h_unit == rhs.h_unit)
         {
-            if(unit < rhs.unit || (unit == rhs.unit && h_unit < rhs.h_unit))
-            {
-                return true;
-            }
-            return false;
+            return true;
         }
-        throw monetary_error {"Different currency!"};
+        return false;
     }
+    throw monetary_error {"Different currency!"};
+}
 
-    //In- och utmatning
-    //print()
-    ostream& Money::print(ostream& os) const
+//operator<
+bool Money::operator<(const Money& rhs) const
+{
+    if (currency == "" || rhs.currency == "" || currency == rhs.currency)
     {
-        if(h_unit < 10)
+        if (unit < rhs.unit || (unit == rhs.unit && h_unit < rhs.h_unit))
         {
-            return os << currency << " " << unit << ".0" << h_unit;
+            return true;
         }
-        return os << currency << " " << unit << "." << h_unit;
+        return false;
     }
+    throw monetary_error {"Different currency!"};
+}
 
-    //operator<<
-    ostream& operator<<(ostream& os, const Money& rhs)
+//In- och utmatning
+//print()
+ostream& Money::print(ostream& os) const
+{
+    if (h_unit < 10)
     {
-        return rhs.print(os);
+        return os << currency << " " << unit << ".0" << h_unit;
     }
+    return os << currency << " " << unit << "." << h_unit;
+}
 
-	// Hjälpfunktion: tar bort alla vita tecken
+//operator<<
+ostream& operator<<(ostream& os, const Money& rhs)
+{
+    return rhs.print(os);
+}
+
+// Hjälpfunktion: tar bort alla vita tecken
 
 void ignore_space(istream& is)
 {
-    while(!(is >> ws))
-    {
-        break;
-    }
+    is >> ws;
 }
 
-	//operator>>
-	std::istream& operator>>(std::istream& is, Money& m)
-	{
-		char c;
-		string new_currency{""};
-		int new_unit{0};
-		int new_h_unit{0};
+//operator>>
+std::istream& operator>>(std::istream& is, Money& m)
+{
+    char c;
+    string new_currency {""};
+    int new_unit {0};
+    int new_h_unit {0};
 
-		while(is.good())
-		{
-		    ignore_space(is);
+    ignore_space(is);
 
-            c = is.peek();
+    c = is.peek();
 
-            while(isalpha(c))
-            {
-                new_currency += toupper(c); // Sätter in bokstäver sist i stringen
-                is.ignore(1);
-                c = is.peek();
-            }
+    while (isalpha(c))
+    {
+        new_currency += toupper(c); // Sätter in bokstäver sist i stringen
+        is.ignore(1);
+        c = is.peek();
+    }
 
-            c = is.peek();
+    c = is.peek();
 
-            if(c != ' ' && !new_currency.empty()) // fortsätter om det är ett mellanrum, annars avslutas programmet.
-            {
-                break;
-            }
-            else
-            {
-                ignore_space(is);
-            }
+    if (c != ' ' && !new_currency.empty()) // fortsätter om det är ett mellanrum, annars avslutas programmet.
+    {
+        return is;
+    }
+    else
+    {
+        ignore_space(is);
+    }
 
-            c = is.peek();
+    c = is.peek();
 
-            if(c == '-')
-            {
-                throw monetary_error{"You can't make money of a negative number!"};
-            }
+    if (c == '-')
+    {
+        std::cout.setstate(std::ios::failbit);
 
-            else if(c == '.')
-            {
-                throw monetary_error{"You need to enter some value!"};
-            }
+        throw monetary_error {"You can't make money of a negative number!"};
+    }
 
-            while(isdigit(c)) // kör så länge det är en siffra
-            {
-                new_unit = new_unit * 10 + atoi(&c);
-                is.ignore(1);
-                c = is.peek();
-            }
+    else if (c == '.')
+    {
+        std::cout.setstate(std::ios::failbit);
+        throw monetary_error {"You need to enter some value!"};
+    }
 
-            c = is.peek();
+    while (isdigit(c)) // kör så länge det är en siffra
+    {
+        new_unit = new_unit * 10 + atoi(&c);
+        is.ignore(1);
+        c = is.peek();
+    }
 
-            if(c == '.')
-            {
-                is.ignore (1);
+    c = is.peek();
 
-                c = is.peek();
+    if (c == '.')
+    {
+        is.ignore(1);
 
-                if(isdigit(c))
-                {
-                    new_h_unit = atoi(&c);
-                    is.ignore(1);
-                }
-                else
-                {
-                    throw monetary_error{"You need to enter two decimals!"};
-                }
+        c = is.peek();
 
-                c = is.peek();
+        if (isdigit(c))
+        {
+            new_h_unit = atoi(&c);
+            is.ignore(1);
+        }
+        else
+        {
+            std::cout.setstate(std::ios::failbit);
+            throw monetary_error {"You need to enter two decimals!"};
+        }
 
-                if(isdigit(c))
-                {
-                    new_h_unit = new_h_unit * 10 + atoi(&c);
+        c = is.peek();
 
-                }
-                else if(!isdigit(c) && new_currency.empty())
-                {
-                    new_h_unit = new_h_unit * 10;
-                }
-                else
-                {
-                    throw monetary_error{"You need to enter two decimals!"};
-                }
+        if (isdigit(c))
+        {
+            new_h_unit = new_h_unit * 10 + atoi(&c);
 
-		    }
-            else
-		    {
-		        break;
-		    }
-            break;
-		}
-		m.check(new_currency, new_unit, new_h_unit); // Ser till att det är 3 bokstäver
+        }
+        else if (!isdigit(c) && new_currency.empty())
+        {
+            new_h_unit = new_h_unit * 10;
+        }
+        else
+        {
+            std::cout.setstate(std::ios::failbit);
+            throw monetary_error {"You need to enter two decimals!"};
+        }
 
-		return is;
-	}
+    }
 
-  //Stegning ++
-  //++m
-  Money& Money::operator++()
-  {
+    m.check(new_currency, new_unit, new_h_unit); // Ser till att det är 3 bokstäver
+
+    return is;
+}
+
+//Stegning ++
+//++m
+Money& Money::operator++()
+{
     ++h_unit;
 
-    if(h_unit > 99)
-      {
-	++unit;
-	h_unit = h_unit - 100;
-      }
+    if (h_unit > 99)
+    {
+        ++unit;
+        h_unit = h_unit - 100;
+    }
     return *this;
-  }
+}
 
-  //m++
-  Money Money::operator++(int)
-  {
+//m++
+Money Money::operator++(int)
+{
     Money temp = *this;
     operator++();
     return temp;
-  }
+}
 
-  //--m
-  Money& Money::operator--()
-  {
+//--m
+Money& Money::operator--()
+{
     --h_unit;
 
-    if(h_unit < 0)
-      {
-	--unit;
-	h_unit = h_unit + 100;
-	if(unit < 0)
-	  {
-	    throw monetary_error {"Can't operate to a value less than zero!"};
-	  }
-      }
+    if (h_unit < 0)
+    {
+        --unit;
+        h_unit = h_unit + 100;
+        if (unit < 0)
+        {
+            throw monetary_error {"Can't operate to a value less than zero!"};
+        }
+    }
     return *this;
-  }
+}
 
-  //m--
-  Money Money::operator--(int)
-  {
+//m--
+Money Money::operator--(int)
+{
     Money temp = *this;
     operator--();
     return temp;
-  }
+}
 
-  //Labbeskrivningens currency(), som vi namngett get_currency p.g.a. att vi använder 'currency' som variabel. Tar fram 'currency'.
-  string Money::get_currency() const
-  {
+//Labbeskrivningens currency(), som vi namngett get_currency p.g.a. att vi använder 'currency' som variabel. Tar fram 'currency'.
+string Money::get_currency() const
+{
     return currency;
-  }
+}
 } //namespace monetary
 

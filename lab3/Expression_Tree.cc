@@ -33,15 +33,18 @@ void Binary_Operator::print(ostream& os) const
 //-*-*-*-*- Assign -*-*-*-*-
 Assign::Assign(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "=")
 {
-    if(!(isalpha(newleftNode->str()[0] && newleftNode->str().size()== 1)))
+    if (!(isalpha(newleftNode->str()[0] && newleftNode->str().size() == 1)))
     {
         throw expression_error("You need to enter a variable to the left of = ");
     }
 }
 long double Assign::evaluate() const
 {
-    //TODO...
-    return 0;
+    Variable* leftNode = dynamic_cast<Variable*> (left_val);
+    long double new_val{right_val->evaluate()};
+    leftNode->set_value(new_val);
+
+    return leftNode->str()[0] = new_val;
 }
 
 Expression_Tree* Assign::clone() const
@@ -158,11 +161,9 @@ Expression_Tree* Real::clone() const
 }
 
 //-*-*-*-*- Variable -*-*-*-*-
-
 long double Variable::evaluate() const
 {
-    // TODO ...
-    return 0;
+    return _value;
 }
 
 string Variable::get_postfix() const
@@ -187,16 +188,10 @@ Expression_Tree* Variable::clone() const
 
 long double Variable::get_value() const
 {
-    //TODO...
-    return 0;
+    return _value;
 }
 
 void Variable::set_value(double new_val)
-{
-    //TODO...
-
-    if(! isdigit(new_val))
-    {
-        throw expression_error("You need to enter a value.");
-    }
+{   
+    _value = new_val;
 }
