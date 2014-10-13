@@ -53,16 +53,6 @@ void Money::swap(Money& rhs) noexcept
     std::swap(h_unit, rhs.h_unit);
 }
 
-//Kopieringskonstruktor
-//    Money::Money(const Money &m): currency(m.currency), unit(m.unit), h_unit(m.h_unit){}
-
-//Flyttkonstruktor
-/*    Money::Money(Money&& m) noexcept
-    {
-        swap(m);
-    }
-*/
-
 //Kopieringstilldelning
 //Denna funktion gör nästan samma sak som flytt-tilldelning varpå vi inte har med den.
 Money& Money::operator=(const Money& rhs) &
@@ -208,7 +198,13 @@ std::istream& operator>>(std::istream& is, Money& m)
     int new_unit {0};
     int new_h_unit {0};
 
-    ignore_space(is);
+    if (!is.good())
+    {
+        is.setstate(ios::failbit);
+        throw monetary_error {"Unvalid input!"};
+    }
+
+    is >> ws;
 
     c = is.peek();
 
@@ -223,25 +219,25 @@ std::istream& operator>>(std::istream& is, Money& m)
 
     if (c != ' ' && !new_currency.empty()) // fortsätter om det är ett mellanrum, annars avslutas programmet.
     {
+        m.check(new_currency, new_unit, new_h_unit);
         return is;
     }
     else
     {
-        ignore_space(is);
+        is >> ws;
     }
 
     c = is.peek();
 
     if (c == '-')
     {
-        std::cout.setstate(std::ios::failbit);
-
+        is.setstate(ios::failbit);
         throw monetary_error {"You can't make money of a negative number!"};
     }
 
     else if (c == '.')
     {
-        std::cout.setstate(std::ios::failbit);
+        is.setstate(ios::failbit);
         throw monetary_error {"You need to enter some value!"};
     }
 
@@ -267,7 +263,7 @@ std::istream& operator>>(std::istream& is, Money& m)
         }
         else
         {
-            std::cout.setstate(std::ios::failbit);
+            is.setstate(ios::failbit);
             throw monetary_error {"You need to enter two decimals!"};
         }
 
@@ -276,16 +272,24 @@ std::istream& operator>>(std::istream& is, Money& m)
         if (isdigit(c))
         {
             new_h_unit = new_h_unit * 10 + atoi(&c);
+            is.ignore(1);
 
         }
         else if (!isdigit(c) && new_currency.empty())
         {
             new_h_unit = new_h_unit * 10;
         }
-        else
+        else // Enligt labbeskrivningen får man inte skriva in SEK 10.1
         {
-            std::cout.setstate(std::ios::failbit);
+            is.setstate(ios::failbit);
+
             throw monetary_error {"You need to enter two decimals!"};
+        }
+
+        if (isdigit(is.peek()))
+        {
+            is.setstate(ios::failbit);
+            throw monetary_error {"You are only allowed to enter two decimals!"};
         }
 
     }
