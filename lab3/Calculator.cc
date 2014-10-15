@@ -51,6 +51,7 @@ print_help()
    cout << "  P     Visa aktuellt uttryck som postfix\n";
    cout << "  T     Visa aktuellt uttryck som träd\n";
    cout << "  S     Avsluta kalkylatorn\n";
+
 }
 
 /**

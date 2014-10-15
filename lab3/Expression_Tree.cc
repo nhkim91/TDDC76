@@ -2,6 +2,7 @@
  * Expression_Tree.cc
  */
 #include "Expression_Tree.h"
+#include "Variable_Table.h"
 #include <iostream>
 #include <string>
 #include <cmath>

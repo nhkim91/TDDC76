@@ -3,6 +3,7 @@
  */
 #include "Expression.h"
 #include "Expression_Tree.h"
+#include "Variable_Table.h"
 #include <algorithm>
 #include <iostream>
 #include <iterator>
