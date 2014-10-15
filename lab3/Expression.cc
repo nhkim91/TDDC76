@@ -29,9 +29,7 @@ Expression::~Expression()
 //Kopieringskonstruktor, flyttkonstruktor
 Expression::Expression(const Expression &e)
 {
-    //!!!!!!!!!!
-    first_node = e.first_node;
-    //first_node = e.first_node->clone();
+    first_node = e.first_node->clone();
 }
 
 
@@ -63,8 +61,7 @@ long double Expression::evaluate() const
 {
     if(first_node == nullptr)
     {
-        return 0;
-        //throw expression_error{"The Expression-object doesn't have an Expression_Tree-object!"};
+        throw expression_error{"The Expression-object doesn't have an Expression_Tree-object!"};
     }
     else
         return first_node->evaluate();
@@ -78,7 +75,6 @@ std::string Expression::get_postfix() const
     if(first_node == nullptr)
     {
         return "";
-        //throw expression_error{"The Expression-object doesn't have an Expression_Tree-object!"};
     }
     else
         return first_node->get_postfix();
@@ -106,7 +102,6 @@ void Expression::print_tree(std::ostream &os) const
     if(first_node == nullptr)
     {
         return;
-        //throw expression_error{"The Expression-object doesn't have an Expression_Tree-object!"};
     }
     else
         first_node->print(os);
@@ -248,17 +243,14 @@ std::string make_postfix(const std::string& infix)
         {
             if (!last_was_operand || postfix.empty() || previous_token == "(")
             {
-                //throw expression_error{""};
-                std::cerr << "operator där operand förväntades\n";
-                exit(EXIT_FAILURE);
+                throw expression_error{"Operator when an operand is expected!"};
             }
 
             if (token == "=")
             {
                 if (assignment)
                 {
-                    std::cerr << "multipel tilldelning";
-                    exit(EXIT_FAILURE);
+                    throw expression_error{"Multiple assignment!"};
                 }
                 else
                 {
@@ -285,14 +277,12 @@ std::string make_postfix(const std::string& infix)
         {
             if (paren_count == 0)
             {
-                std::cerr << "vänsterparentes saknas\n";
-                exit(EXIT_FAILURE);
+                throw expression_error{"Left parenthesis is missing!"};
             }
 
             if (previous_token == "(" && !postfix.empty())
             {
-                std::cerr << "tom parentes\n";
-                exit(EXIT_FAILURE);
+                throw expression_error{"Empty parenthesis!"};
             }
 
             while (!operator_stack.empty() && operator_stack.top() != "(")
@@ -303,8 +293,7 @@ std::string make_postfix(const std::string& infix)
 
             if (operator_stack.empty())
             {
-                std::cerr << "högerparentes saknar matchande vänsterparentes\n";
-                exit(EXIT_FAILURE);
+                throw expression_error{"Right parenthesis misses left parenthesis!"};
             }
             // Det finns en vänsterparentes på stacken
             operator_stack.pop();
@@ -314,8 +303,7 @@ std::string make_postfix(const std::string& infix)
         {
             if (last_was_operand || previous_token == ")")
             {
-                std::cerr << "operand där operator förväntades\n";
-                exit(EXIT_FAILURE);
+                throw expression_error{"Operand when an operator is expected!"};
             }
 
             postfix += token + ' ';
@@ -323,8 +311,7 @@ std::string make_postfix(const std::string& infix)
         }
         else
         {
-            std::cerr << "otillåten symbol\n";
-            exit(EXIT_FAILURE);
+            throw expression_error{"Unallowable symbol!"};
         }
 
         previous_token = token;
@@ -332,20 +319,17 @@ std::string make_postfix(const std::string& infix)
 
     if (postfix == "")
     {
-        std::cerr << "tomt infixuttryck!\n";
-        exit(EXIT_FAILURE);
+        throw expression_error{"Empty infix-expression!"};
     }
 
     if (!last_was_operand && !postfix.empty())
     {
-        std::cerr << "operator avslutar\n";
-        exit(EXIT_FAILURE);
+        throw expression_error{"Operator ends!"};
     }
 
     if (paren_count > 0)
     {
-        std::cerr << "högerparentes saknas\n";
-        exit(EXIT_FAILURE);
+        throw expression_error{"Right parenthesis is missing!"};
     }
 
     while (!operator_stack.empty())
@@ -438,8 +422,7 @@ Expression_Tree* make_expression_tree(const std::string& postfix)
 
     if (tree_stack.empty())
     {
-        std::cerr << "ingen postfix given\n";
-        exit(EXIT_FAILURE);
+        throw expression_error{"No postfix is given!"};
     }
 
     if (tree_stack.size() > 1)
@@ -449,8 +432,7 @@ Expression_Tree* make_expression_tree(const std::string& postfix)
             delete tree_stack.top();
             tree_stack.pop();
         }
-        std::cerr << "felaktig postfix\n";
-        exit(EXIT_FAILURE);
+        throw expression_error{"Incorrect postfix!"};
     }
 
     // Returnera trädet.
