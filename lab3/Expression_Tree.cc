@@ -39,7 +39,7 @@ Assign::Assign(Expression_Tree* newleftNode, Expression_Tree* newrightNode)
 {
     if (dynamic_cast<Variable*>(newleftNode) == nullptr)
     {
-        throw expression_error("You need to enter a variable to the left of = ");
+        throw expression_tree_error("You need to enter a variable to the left of = ");
     }
 }
 
