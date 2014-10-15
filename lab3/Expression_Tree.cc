@@ -24,35 +24,29 @@ string Binary_Operator::str() const
     return _str;
 }
 
-void Binary_Operator::print(ostream& os) const
+void Binary_Operator::print(ostream& os, int depth = 0) const
 {
-    int depth = 3;
-
-    os << setw(depth+3);
-    left_val->print(os);
-    os << endl << setw(depth+1) << "/" << endl;
-    os << setw(depth)<< _str << endl;
-    os << setw(depth+1) << "\\" << endl;
-    os << setw(depth+4);
-    right_val->print(os);
-    os << endl;
+    right_val->print(os, depth + 2);
+    os << endl << string(depth + 1, ' ') << '/' << endl;
+    os << string(depth, ' ') << _str << endl;
+    os << string(depth + 1, ' ') << '\\' << endl;
+    left_val->print(os, depth + 2);
 }
 
 //-*-*-*-*- Assign -*-*-*-*-
 Assign::Assign(Expression_Tree* newleftNode, Expression_Tree* newrightNode)
     : Binary_Operator(newleftNode, newrightNode, "=")
 {
-
-    if (!(isalpha(newleftNode->str()[0] && newleftNode->str().size() == 1)))
+    if (dynamic_cast<Variable*>(newleftNode) == nullptr)
     {
         throw expression_error("You need to enter a variable to the left of = ");
     }
 }
+
 long double Assign::evaluate() const
 {
-    Variable* leftNode = dynamic_cast<Variable*> (left_val);
-    long double new_val{right_val->evaluate()};
-    leftNode->set_value(new_val);
+    Variable* leftNode = dynamic_cast<Variable*>(left_val);
+    leftNode->set_value(right_val->evaluate());
 
     return leftNode->get_value();
 }
@@ -134,9 +128,9 @@ string Integer::str() const
     return to_string(_value);
 }
 
-void Integer::print(ostream& os) const
+void Integer::print(ostream& os, int depth) const
 {
-    os << _value;
+    os << string(depth + 1, ' ') << _value;
 }
 
 Expression_Tree* Integer::clone() const
@@ -160,9 +154,9 @@ string Real::str() const
     return to_string(_value);
 }
 
-void Real::print(ostream& os) const
+void Real::print(ostream& os, int depth) const
 {
-    os << _value;
+    os << string(depth + 1, ' ') << _value;
 }
 
 Expression_Tree* Real::clone() const
@@ -186,9 +180,9 @@ string Variable::str() const
     return _str;
 }
 
-void Variable::print(ostream& os) const
+void Variable::print(ostream& os, int depth) const
 {
-    os << _str;
+    os << string(depth + 1, ' ') << _str;
 }
 
 Expression_Tree* Variable::clone() const
@@ -201,7 +195,7 @@ long double Variable::get_value() const
     return _value;
 }
 
-void Variable::set_value(double new_val)
-{   
+void Variable::set_value(long double new_val)
+{
     _value = new_val;
 }

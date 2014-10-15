@@ -10,22 +10,16 @@ int main()
 {
     // Ska inte vara möjligt - Expression_Tree ska vara abstrakt:
     // Expression_Tree* t0{new Expression_Tree};
-    //Variable* var = new Variable("x");
-
 
     Expression_Tree* t1 {new Plus{ new Integer{7}, new Real{3.14} } };
-    //Expression_Tree* t3{new Assign{var->str(), new Plus{t1, new Real{1} } } };
-    //t3->print(cout);
+    Expression_Tree* t3{new Assign{new Variable {"x"}, new Plus{new Real{1}, t1 } } };
+    t3->print(cout);
+    cout << endl;
 
-    Expression_Tree* seven_p = new Integer {7};
-    Expression_Tree* x = new Variable {"x"};
-    Expression_Tree* eq = new Assign(x, seven_p);
-
-    //cout << "TEST Variable/Assign: "
-         //<< var->str() << " " << var->get_value() << endl;
-
-
-    //cout << "=" << t1->evaluate();
+    Expression_Tree* ta{ new Assign{new Variable{"y"}, new Plus{ new Integer{5}, new Real { 2.6}}}};
+    cout << "ta: " << endl;
+    ta->print(cout);
+    cout << endl;
     cout << endl;
     try
 
@@ -52,8 +46,6 @@ int main()
     }
     cout << "t2->get_postfix() = " << t2->get_postfix() << '\n';
     cout << "t2->str() = " << t2->str() << "\n\n";
-
-
 
     return 0;
 }

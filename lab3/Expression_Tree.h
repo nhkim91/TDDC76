@@ -41,7 +41,7 @@ public:
     virtual long double      evaluate() const = 0;
     virtual std::string      get_postfix() const = 0;
     virtual std::string      str() const = 0;
-    virtual void             print(std::ostream&) const = 0;
+    virtual void             print(std::ostream&, int depth = 3) const = 0;
     virtual Expression_Tree* clone() const = 0;
 
 
@@ -61,7 +61,7 @@ public:
     virtual long double      evaluate() const override = 0;
     virtual std::string      get_postfix() const override;
     virtual std::string      str() const override;
-    virtual void             print(std::ostream&) const override;
+    virtual void             print(std::ostream&, int depth) const override;
     virtual Expression_Tree* clone() const override = 0;
 
     Binary_Operator(Expression_Tree* newleftNode, Expression_Tree* newrightNode, std::string str)
@@ -83,8 +83,8 @@ public:
     virtual long double evaluate() const override = 0;
     virtual std::string      get_postfix() const override = 0;
     virtual std::string      str() const override = 0;
-    virtual void             print(std::ostream&) const override = 0;
-    virtual Expression_Tree* clone() const override =0;
+    virtual void             print(std::ostream&, int) const override = 0;
+    virtual Expression_Tree* clone() const override = 0;
 
     Operand(Expression_Tree* new_operand) : Expression_Tree(), operand {new_operand} {}
 
@@ -173,7 +173,7 @@ public:
     virtual long double      evaluate() const override;
     virtual std::string      get_postfix() const override;
     virtual std::string      str() const override;
-    virtual void             print(std::ostream&os) const override;
+    virtual void             print(std::ostream& os, int depth = 0) const override;
     virtual Expression_Tree* clone() const override;
 
     Integer(long int value = 0) : Operand() , _value {value} {}
@@ -190,7 +190,7 @@ public:
     virtual long double      evaluate() const override;
     virtual std::string      get_postfix() const override;
     virtual std::string      str() const override;
-    virtual void             print(std::ostream&os) const override;
+    virtual void             print(std::ostream& os, int depth = 0) const override;
     virtual Expression_Tree* clone() const override;
 
     Real(long double value = 0) : Operand(), _value {value} {}
@@ -209,17 +209,17 @@ public:
     virtual long double      evaluate() const override;
     virtual std::string      str() const override;
     virtual std::string      get_postfix() const override;
-    virtual void             print(std::ostream&os) const override;
+    virtual void             print(std::ostream& os, int depth = 0) const override;
     virtual Expression_Tree* clone() const override;
 
     long double get_value() const;
-    void set_value(double new_val);
+    void set_value(long double new_val);
 
-    Variable(std::string str) : Operand(), _str {str}{}
+    Variable(std::string str) : Operand(), _str {str} {}
 
 private:
     std::string _str {""};
-    long double _value{0};
+    long double _value {0};
 };
 
 #endif
