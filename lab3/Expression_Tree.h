@@ -8,7 +8,7 @@
 #include <stdexcept>
 
 /*
- * expression_error: kastas om ett fel inträffar i en Expression-operation;
+ * expression_tree_error: kastas om ett fel inträffar i en Expression-operation;
  * ett diagnostiskt meddelande ska skickas med.
  */
 
@@ -16,13 +16,13 @@
 /*
  *Undantagsklass
  */
-class expression_error: public std::logic_error
+class expression_tree_error: public std::logic_error
 {
 public:
-    explicit expression_error(const std::string& what_arg) noexcept
+    explicit expression_tree_error(const std::string& what_arg) noexcept
 : std::logic_error(what_arg) {}
 
-    explicit expression_error(const char* what_arg) noexcept
+    explicit expression_tree_error(const char* what_arg) noexcept
 : std::logic_error(what_arg) {}
 };
 
