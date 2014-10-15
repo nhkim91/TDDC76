@@ -31,13 +31,19 @@ public:
 class Expression
 {
 public:
-    // OBSERVERA: DETTA ÄR ENDAST KODSKELETT - MODIFIERA OCH KOMPLETTERA!
 
+    //Default-konstruktor
     Expression(class Expression_Tree* = nullptr);
-    ~Expression() = default; //Lade till en destruktor, för det antar jag att vi borde ha?
+    //Destruktor
+    ~Expression();
 
-    //Kopieringskonstruktor, flyttkonstruktor, kopieringstilldelning, flytt-tilldelning...?
-    Expression(const Expression&) = default;
+    //Kopieringskonstruktor, flyttkonstruktor
+    Expression(const Expression &e);
+    Expression(Expression&&) noexcept;
+
+    //Kopieringstilldelning, flytt-tilldelning
+    Expression& operator=(const Expression&) &;
+    Expression& operator=(Expression&&) &;
 
     long double evaluate() const;
     std::string get_postfix() const;
