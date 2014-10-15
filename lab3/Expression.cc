@@ -14,20 +14,54 @@
 #include <vector>
 using namespace std;
 
-
+//Deafult-konsruktor
 Expression::Expression(class Expression_Tree* tree)
 {
+    //cout << (tree == nullptr ? "nullptr" : "a tree") << endl;
     first_node = tree;
 }
+
+//Destruktor
+Expression::~Expression()
+{
+    delete first_node;
+}
+//Kopieringskonstruktor
+Expression::Expression(const Expression& e)
+{
+    first_node = e.first_node;
+}
+//Flyttkonstruktor
+Expression::Expression(Expression&& e) noexcept
+{
+    swap(e);
+}
+
+//kopieringstilldelning & flytt-tilldelning
+Expression& Expression::operator = (const Expression& rhs) &
+{
+    delete first_node;
+    first_node = rhs.first_node->clone();
+    return *this;
+}
+
+Expression& Expression::operator = (Expression && rhs) &
+{
+    delete first_node;
+    first_node = nullptr;
+    swap(rhs);
+    return *this;
+}
+
 
 /*
  * evaluate()
  */
 long double Expression::evaluate() const
 {
-    if(first_node == nullptr)
+    if (first_node == nullptr)
     {
-        throw expression_error{"The Expression-object doesn't have an Expression_Tree-object!"};
+        throw expression_error {"The Expression-object doesn't have an Expression_Tree-object!"};
     }
     else
         return first_node->evaluate();
@@ -36,12 +70,11 @@ long double Expression::evaluate() const
 /*
  * get_postfix()
  */
-//Ska vi ha med något om first_node == nullptr? Felhantering?
 std::string Expression::get_postfix() const
 {
-    if(first_node == nullptr)
+    if (first_node == nullptr)
     {
-        throw expression_error{"The Expression-object doesn't have an Expression_Tree-object!"};
+        return "";
     }
     else
         return first_node->get_postfix();
@@ -52,7 +85,7 @@ std::string Expression::get_postfix() const
  */
 bool Expression::empty() const
 {
-    if(first_node == nullptr)
+    if (first_node == nullptr)
     {
         return true;
     }
@@ -63,12 +96,11 @@ bool Expression::empty() const
 /*
  * print_tree()
  */
-//Ska vi ha med något om first_node == nullptr? Felhantering?
 void Expression::print_tree(std::ostream &os) const
 {
-    if(first_node == nullptr)
+    if (first_node == nullptr)
     {
-        throw expression_error{"The Expression-object doesn't have an Expression_Tree-object!"};
+        return;
     }
     else
         first_node->print(os);
@@ -79,11 +111,8 @@ void Expression::print_tree(std::ostream &os) const
  */
 void Expression::swap(Expression &rhs)
 {
-    Expression temp = *this;
-    *this = rhs;
-    rhs = temp;
+    std::swap(first_node, rhs.first_node);
 }
-
 /*
  * swap(x, y)
  */
@@ -108,12 +137,28 @@ using std::make_pair;
 using std::string;
 
 // Teckenuppsättningar för operander. Används av make_expression_tree().
-const string letters{"abcdefghijklmnopqrstuvwxyz"};
-const string digits{"0123456789"};
-const string integer_chars{digits};
-const string real_chars{digits + '.'};
-const string variable_chars{letters};
-const string operand_chars{letters + digits + '.'};
+const string letters
+{"abcdefghijklmnopqrstuvwxyz"
+};
+const string digits
+{"0123456789"
+};
+const string integer_chars
+{
+    digits
+};
+const string real_chars
+{
+    digits + '.'
+};
+const string variable_chars
+{
+    letters
+};
+const string operand_chars
+{
+    letters + digits + '.'
+};
 
 // Tillåtna operatorer. Används av make_postfix() och make_expression_tree().
 // Prioritetstabeller, en för inkommandeprioritet och en för stackprioritet.
@@ -122,14 +167,18 @@ const string operand_chars{letters + digits + '.'};
 // högerassociativitet, det motsatta vänsterassociativitet. Används av make_postfix().
 using priority_table = map<string, int>;
 
-const vector<string> operators{ "^", "*", "/", "+", "-", "=" };
-const priority_table input_priority{ {"^", 8}, {"*", 5}, {"/", 5}, {"+", 3}, {"-", 3}, {"=", 2} };
-const priority_table stack_priority{ {"^", 7}, {"*", 6}, {"/", 6}, {"+", 4}, {"-", 4}, {"=", 1} };
+const vector<string> operators { "^", "*", "/", "+", "-", "=" };
+const priority_table input_priority
+{ {"^", 8}, {"*", 5}, {"/", 5}, {"+", 3}, {"-", 3}, {"=", 2}
+};
+const priority_table stack_priority
+{ {"^", 7}, {"*", 6}, {"/", 6}, {"+", 4}, {"-", 4}, {"=", 1}
+};
 
 // Hjälpfunktioner för att kategorisera lexikala element.
 bool is_operator(char token)
 {
-    return find(begin(operators), end(operators), string{token}) != end(operators);
+    return find(begin(operators), end(operators), string {token}) != end(operators);
 }
 
 bool is_operator(const string& token)
@@ -199,11 +248,11 @@ std::string make_postfix(const std::string& infix)
     stack<string> operator_stack;
     string        token;
     string        previous_token;
-    bool          last_was_operand{false};
-    bool          assignment{false};
-    int           paren_count{0};
+    bool          last_was_operand {false};
+    bool          assignment {false};
+    int           paren_count {0};
 
-    istringstream is{format_infix(infix)};
+    istringstream is {format_infix(infix)};
     string        postfix;
 
     while (is >> token)
@@ -230,8 +279,8 @@ std::string make_postfix(const std::string& infix)
             }
 
             while (!operator_stack.empty() && operator_stack.top() != "(" &&
-                   input_priority.find(token)->second <=
-                   stack_priority.find(operator_stack.top())->second)
+                    input_priority.find(token)->second <=
+                    stack_priority.find(operator_stack.top())->second)
             {
                 postfix += operator_stack.top() + ' ';
                 operator_stack.pop();
@@ -335,7 +384,7 @@ Expression_Tree* make_expression_tree(const std::string& postfix)
 
     stack<Expression_Tree*> tree_stack;
     string                  token;
-    istringstream           ps{postfix};
+    istringstream           ps {postfix};
 
     while (ps >> token)
     {
@@ -343,10 +392,11 @@ Expression_Tree* make_expression_tree(const std::string& postfix)
         {
             if (tree_stack.empty())
             {
-                std::cerr << "felaktig postfix\n";
-                exit(EXIT_FAILURE);
+                throw expression_error {"Wrong postfix\n"};
+                //std::cerr << "felaktig postfix\n";
+                //exit(EXIT_FAILURE);
             }
-            Expression_Tree* rhs{tree_stack.top()};
+            Expression_Tree* rhs {tree_stack.top()};
             tree_stack.pop();
 
             if (tree_stack.empty())
@@ -354,45 +404,45 @@ Expression_Tree* make_expression_tree(const std::string& postfix)
                 std::cerr << "felaktig postfix\n";
                 exit(EXIT_FAILURE);
             }
-            Expression_Tree* lhs{tree_stack.top()};
+            Expression_Tree* lhs {tree_stack.top()};
             tree_stack.pop();
 
             if (token == "^")
             {
-                tree_stack.push(new Power{lhs, rhs});
+                tree_stack.push(new Power {lhs, rhs});
             }
             else if (token == "*")
             {
-                tree_stack.push(new Times{lhs, rhs});
+                tree_stack.push(new Times {lhs, rhs});
             }
             else if (token == "/")
             {
-                tree_stack.push(new Divide{lhs, rhs});
+                tree_stack.push(new Divide {lhs, rhs});
             }
             else if (token == "+")
             {
-                tree_stack.push(new Plus{lhs, rhs});
+                tree_stack.push(new Plus {lhs, rhs});
             }
             else if (token == "-")
             {
-                tree_stack.push(new Minus{lhs, rhs});
+                tree_stack.push(new Minus {lhs, rhs});
             }
             else if (token == "=")
             {
-                tree_stack.push(new Assign{lhs, rhs});
+                tree_stack.push(new Assign {lhs, rhs});
             }
         }
         else if (is_integer(token))
         {
-            tree_stack.push(new Integer{std::stoll(token.c_str())});
+            tree_stack.push(new Integer {std::stoll(token.c_str())});
         }
         else if (is_real(token))
         {
-            tree_stack.push(new Real{std::stold(token.c_str())});
+            tree_stack.push(new Real {std::stold(token.c_str())});
         }
         else if (is_identifier(token))
         {
-            tree_stack.push(new Variable{token});
+            tree_stack.push(new Variable {token});
         }
         else
         {
@@ -426,5 +476,5 @@ Expression_Tree* make_expression_tree(const std::string& postfix)
 
 Expression make_expression(const string& infix)
 {
-    return Expression{make_expression_tree(make_postfix(infix))};
+    return Expression {make_expression_tree(make_postfix(infix))};
 }
