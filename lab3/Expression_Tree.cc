@@ -19,6 +19,12 @@ string Binary_Operator::get_postfix() const
 {
     return left_val->get_postfix() + " " + right_val->get_postfix() + " " + _str;
 }
+
+string Binary_Operator::get_infix() const
+{
+    return left_val->get_infix() + " " + _str + " " + right_val->get_infix();
+}
+
 string Binary_Operator::str() const
 {
     return _str;
@@ -123,6 +129,11 @@ string Integer::get_postfix() const
     return to_string(_value);
 }
 
+string Integer::get_infix() const
+{
+    return to_string(_value);
+}
+
 string Integer::str() const
 {
     return to_string(_value);
@@ -149,6 +160,11 @@ string Real::get_postfix() const
     return to_string(_value);
 }
 
+string Real::get_infix() const
+{
+    return to_string(_value);
+}
+
 string Real::str() const
 {
     return to_string(_value);
@@ -171,6 +187,11 @@ long double Variable::evaluate() const
 }
 
 string Variable::get_postfix() const
+{
+    return _str;
+}
+
+string Variable::get_infix() const
 {
     return _str;
 }

@@ -40,6 +40,7 @@ public:
 
     virtual long double      evaluate() const = 0;
     virtual std::string      get_postfix() const = 0;
+    virtual std::string      get_infix() const = 0;
     virtual std::string      str() const = 0;
     virtual void             print(std::ostream&, int depth = 3) const = 0;
     virtual Expression_Tree* clone() const = 0;
@@ -61,6 +62,7 @@ public:
 
     virtual long double      evaluate() const override = 0;
     virtual std::string      get_postfix() const override;
+    virtual std::string      get_infix() const override;
     virtual std::string      str() const override;
     virtual void             print(std::ostream&, int depth) const override;
     virtual Expression_Tree* clone() const override = 0;
@@ -83,6 +85,7 @@ public:
 
     virtual long double evaluate() const override = 0;
     virtual std::string      get_postfix() const override = 0;
+    virtual std::string      get_infix() const override = 0;
     virtual std::string      str() const override = 0;
     virtual void             print(std::ostream&, int) const override = 0;
     virtual Expression_Tree* clone() const override = 0;
@@ -173,6 +176,7 @@ public:
 
     virtual long double      evaluate() const override;
     virtual std::string      get_postfix() const override;
+    virtual std::string      get_infix() const override;
     virtual std::string      str() const override;
     virtual void             print(std::ostream& os, int depth = 0) const override;
     virtual Expression_Tree* clone() const override;
@@ -190,6 +194,7 @@ public:
     virtual ~Real() = default;
     virtual long double      evaluate() const override;
     virtual std::string      get_postfix() const override;
+    virtual std::string      get_infix() const override;
     virtual std::string      str() const override;
     virtual void             print(std::ostream& os, int depth = 0) const override;
     virtual Expression_Tree* clone() const override;
@@ -210,6 +215,7 @@ public:
     virtual long double      evaluate() const override;
     virtual std::string      str() const override;
     virtual std::string      get_postfix() const override;
+    virtual std::string      get_infix() const override;
     virtual void             print(std::ostream& os, int depth = 0) const override;
     virtual Expression_Tree* clone() const override;
 
