@@ -23,7 +23,7 @@ string Binary_Operator::get_postfix() const
 
 string Binary_Operator::get_infix() const
 {
-    return left_val->get_infix() + " " + _str + " " + right_val->get_infix();
+    return " (" + left_val->get_infix() + " " + _str + " " + right_val->get_infix() + ")";
 }
 
 string Binary_Operator::str() const
