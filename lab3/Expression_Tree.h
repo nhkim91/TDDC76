@@ -45,6 +45,7 @@ public:
     virtual Expression_Tree* clone() const = 0;
 
 
+
 };
 
 //-*-*-*-*- Binary_Oparator -*-*-*-*-
