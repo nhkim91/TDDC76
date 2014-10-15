@@ -3,36 +3,47 @@
 #include <map>
 #include <string>
 #include <iostream>
+#include <stdexcept>
+
+
+/*
+ *Undantagsklass
+ */
+class Variabel_Table_error: public std::logic_error
+{
+public:
+    explicit Variabel_Table_error(const std::string& what_arg) noexcept
+: std::logic_error(what_arg) {}
+
+    explicit Variabel_Table_error(const char* what_arg) noexcept
+: std::logic_error(what_arg) {}
+};
+
+
 class Variable_Table
 {
 public:
+    //DefaultKonstruktor
     Variable_Table() = default;
+
+    //Destruktor
     ~Variable_Table() = default;
-    Expression_Tree(const Variable_Table()&) = default;
 
-   /*
-    • insert(namn, värde) ska lägga till en ny variabel och dess värde i tabellen.
-    • remove(namn) ska ta bort en variabel och dess värde ur tabellen.
-    • find(namn) ska returnera true om variabeln finns i tabellen, annars false.
-    • set_value(namn, värde) ska ändra värdet för en variabel som finns i tabellen.
-    • get_value(namn) ska returnera värdet för en variabel som finns i tabellen.
-    • list(ostream) ska skiva ut alla variabler i tabellen på en utström. För varje variabel skrivs först dess namn ut,
-    följt av ett kolon och ett mellanrum och sist på raden variabelns värde.
-    • clear() ska tömma tabellen.
-    • empty() ska returnera true om tabellen är tom, annars false.
-    */
+    //Kopieringskonstruktor
+    Variable_Table(const Variable_Table&) = default;
 
-    void insert(std::string name, long double value);
-    void remove(std::string name);
-    bool find(std::string name);
-    void set_value(std::string name, value);
-    long double get_value(std::string name);
-    void list(std::ostream&);
+    void        insert(std::string name, long double value);
+    void        remove(std::string name);
+    bool        find(std::string name)                          const;
+    void        list(std::ostream&) const;
+    long double get_value(std::string name)                     const;
+    void        set_value(std::string name, long double value);
+    void        clear() noexcept;
+    bool        empty()                                         const;
 
 
 private:
-
-
+   std::map<std::string, long double> v_table;
 };
 
 #endif // VARIABLE_TABLE_H

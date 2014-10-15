@@ -12,7 +12,8 @@ using namespace std;
 
 int main()
 {
-   Calculator calc;
+   /*
+    Calculator calc;
 
    try
    {
@@ -22,6 +23,9 @@ int main()
    {
       cout << "Ett okänt fel har inträffat.\n";
    }
+   //*/
+
+
 
    return 0;
 }
