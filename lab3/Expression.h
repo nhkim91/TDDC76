@@ -11,7 +11,19 @@
  * expression_error: kastas om fel inträffar i en Expression- operation;
  * ett diagnostiskt meddelande ska skickas med.
  */
-// ATT GÖRA!
+
+/*
+ * Undantagsklass
+ */
+class expression_error: public std::logic_error
+{
+public:
+    explicit expression_error(const std::string& what_arg) noexcept
+        : std::logic_error(what_arg) {}
+
+    explicit expression_error(const char* what_arg) noexcept
+        : std::logic_error(what_arg) {}
+};
 
 /**
  * Expression: Klass för att representera ett enkelt aritmetiskt uttryck.
@@ -19,15 +31,22 @@
 class Expression
 {
 public:
-   // OBSERVERA: DETTA ÄR ENDAST KODSKELETT - MODIFIERA OCH KOMPLETTERA!
+    // OBSERVERA: DETTA ÄR ENDAST KODSKELETT - MODIFIERA OCH KOMPLETTERA!
 
-   Expression(class Expression_Tree* = nullptr) {}
+    Expression(class Expression_Tree* = nullptr);
+    ~Expression() = default; //Lade till en destruktor, för det antar jag att vi borde ha?
 
-   long double evaluate() const;
-   std::string get_postfix() const;
-   bool        empty() const;
-   void        print_tree(std::ostream&) const;
-   void        swap(Expression&);
+    //Kopieringskonstruktor, flyttkonstruktor, kopieringstilldelning, flytt-tilldelning...?
+    Expression(const Expression&) = default;
+
+    long double evaluate() const;
+    std::string get_postfix() const;
+    bool        empty() const;
+    void        print_tree(std::ostream&) const;
+    void        swap(Expression&);
+
+private:
+    Expression_Tree* first_node{nullptr};
 };
 
 /**
