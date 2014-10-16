@@ -1,3 +1,11 @@
+/* FILNAMN:       monetary.cc
+ * LABORATION:    lab2
+ *PROGRAMMERARE: Kim Nguyen Hoang 910112-0260 Y3.c kimng797
+ *               Kerstin Soderqvist 911006-0309 Y3.c kerso255
+ * DATUM:         2014-10-16
+ * BESKRIVNING: Definitioner av funktioner som används i klassen Money
+ */
+
 #include <iostream>
 #include <ios>
 #include <string>
@@ -183,12 +191,6 @@ ostream& operator<<(ostream& os, const Money& rhs)
     return rhs.print(os);
 }
 
-// Hjälpfunktion: tar bort alla vita tecken
-
-void ignore_space(istream& is)
-{
-    is >> ws;
-}
 
 //operator>>
 std::istream& operator>>(std::istream& is, Money& m)
@@ -294,7 +296,9 @@ std::istream& operator>>(std::istream& is, Money& m)
 
     }
 
-    m.check(new_currency, new_unit, new_h_unit); // Ser till att det är 3 bokstäver
+    //check är en funktion "utifrån", därför antar vi att failbit inte behöver sättas om det blir fel när
+    // man kontrollerar om det är 3 bokstäver.
+    m.check(new_currency, new_unit, new_h_unit);
 
     return is;
 }

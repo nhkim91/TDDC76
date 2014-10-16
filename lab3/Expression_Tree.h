@@ -227,6 +227,7 @@ public:
 private:
     std::string _str {""};
     long double _value {0};
+    Variable_Table* ref_v_table;
 };
 
 #endif

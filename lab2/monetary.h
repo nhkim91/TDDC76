@@ -1,3 +1,11 @@
+/* FILNAMN:       monetary.h
+ * LABORATION:    lab2
+ *PROGRAMMERARE: Kim Nguyen Hoang 910112-0260 Y3.c kimng797
+ *               Kerstin Soderqvist 911006-0309 Y3.c kerso255
+ * DATUM:         2014-10-16
+ * BESKRIVNING: Filen innehåller deklarationer för klassen Money samt klassen för undantag
+ */
+
 #ifndef MONETARY_H
 #define MONETARY_H
 
@@ -12,10 +20,10 @@ class monetary_error: public std::logic_error
 {
 public:
     explicit monetary_error(const std::string& what_arg) noexcept
-        :std::logic_error(what_arg) {}
+: std::logic_error(what_arg) {}
 
     explicit monetary_error(const char* what_arg) noexcept
-        :std::logic_error(what_arg) {}
+: std::logic_error(what_arg) {}
 };
 
 class Money
@@ -27,13 +35,12 @@ private:
 
     void swap(Money&) noexcept;
     void check(const std::string&, const int, const int); //Kollar att allt står rätt till, ex Att currency har tre bokstäver
-    void ignore_space(std::istream&); // Tar bort vita tecken
 
 public:
     //Default-konstruktor
     Money() = default;
-    Money(const int u, const int h=0);
-    Money(const std::string &c, const int u=0, const int h=0);
+    Money(const int u, const int h = 0);
+    Money(const std::string &c, const int u = 0, const int h = 0);
 
     //Kopieringskonstruktor.
     Money(const Money&) = default;
@@ -48,15 +55,27 @@ public:
     Money& operator=(const Money&) &;
 
     //Flytt-tilldelning.
-    Money& operator=(Money&&) &;
+    Money& operator=(Money &&) &;
 
     //Jämförelser
     bool operator==(const Money&) const;
-    bool operator!=(const Money &rhs) const {return !(*this == rhs);}
+    bool operator!=(const Money &rhs) const
+    {
+        return !(*this == rhs);
+    }
     bool operator<(const Money&) const;
-    bool operator>(const Money &rhs) const {return !(*this < rhs || *this == rhs);}
-    bool operator<=(const Money &rhs) const {return (*this < rhs || *this == rhs);}
-    bool operator>=(const Money &rhs) const {return !(*this < rhs);}
+    bool operator>(const Money &rhs) const
+    {
+        return !(*this < rhs || *this == rhs);
+    }
+    bool operator<=(const Money &rhs) const
+    {
+        return (*this < rhs || *this == rhs);
+    }
+    bool operator>=(const Money &rhs) const
+    {
+        return !(*this < rhs);
+    }
 
     //In- och utmatning
     std::ostream& print(std::ostream&) const;

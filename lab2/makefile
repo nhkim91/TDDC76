@@ -2,7 +2,7 @@
 # LABORATION:    lab2
 #PROGRAMMERARE: Kim Nguyen Hoang 910112-0260 Y3.c kimng797
 #               Kerstin Soderqvist 911006-0309 Y3.c kerso255
-# DATUM:         2014-10-02
+# DATUM:         2014-10-16
 
 CCC = g++	#C++ kompilator(g++)
 CCFLAGS = -g -std=c++11 #Kompilerar 
