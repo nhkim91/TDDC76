@@ -21,10 +21,10 @@ class expression_tree_error: public std::logic_error
 {
 public:
     explicit expression_tree_error(const std::string& what_arg) noexcept
-: std::logic_error(what_arg) {}
+        : std::logic_error(what_arg) {}
 
     explicit expression_tree_error(const char* what_arg) noexcept
-: std::logic_error(what_arg) {}
+        : std::logic_error(what_arg) {}
 };
 
 
@@ -36,25 +36,27 @@ class Expression_Tree
 public:
     //Default-konstruktorer
     Expression_Tree() = default;
-    virtual ~Expression_Tree() = default;
     Expression_Tree(const Expression_Tree&) = default;
+    virtual ~Expression_Tree() = default;
 
     virtual long double      evaluate() const = 0;
     virtual std::string      get_postfix() const = 0;
     virtual std::string      get_infix() const = 0;
     virtual std::string      str() const = 0;
+    //virtual void             print(std::ostream&) const = 0;
     virtual void             print(std::ostream&, int depth = 3) const = 0;
     virtual Expression_Tree* clone() const = 0;
-
-
-
 };
 
-//-*-*-*-*- Binary_Oparator -*-*-*-*-
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+//-*-*-*-*- Binary_Operator -*-*-*-*-
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 class Binary_Operator : public Expression_Tree
 {
 public:
+    Binary_Operator(Expression_Tree* newleftNode, Expression_Tree* newrightNode, std::string str)
+        : Expression_Tree(), left_val {newleftNode}, right_val {newrightNode}, _str(str) {}
     virtual ~Binary_Operator()
     {
         delete left_val;
@@ -65,11 +67,9 @@ public:
     virtual std::string      get_postfix() const override;
     virtual std::string      get_infix() const override;
     virtual std::string      str() const override;
-    virtual void             print(std::ostream&, int depth) const override;
+    //virtual void             print(std::ostream&) const override;
+    virtual void             print(std::ostream&, int depth) const;
     virtual Expression_Tree* clone() const override = 0;
-
-    Binary_Operator(Expression_Tree* newleftNode, Expression_Tree* newrightNode, std::string str)
-        : Expression_Tree(), left_val {newleftNode}, right_val {newrightNode}, _str(str) {}
 
 protected:
     Expression_Tree* left_val;
@@ -77,147 +77,176 @@ protected:
     std::string _str {""};
 };
 
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-
 //-*-*-*-*- Operand -*-*-*-*-
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
 class Operand : public Expression_Tree
 {
 public:
     Operand() = default;
+    Operand(Expression_Tree* new_operand) : Expression_Tree(), operand {new_operand} {}
     virtual ~Operand() = default;
 
-    virtual long double evaluate() const override = 0;
-    virtual std::string      get_postfix() const override = 0;
-    virtual std::string      get_infix() const override = 0;
+    virtual long double      evaluate() const override = 0;
+    virtual std::string      get_postfix() const override;
+    virtual std::string      get_infix() const override;
     virtual std::string      str() const override = 0;
+    //virtual void             print(std::ostream&) const override = 0;
     virtual void             print(std::ostream&, int) const override = 0;
-    virtual Expression_Tree* clone() const override = 0;
-
-    Operand(Expression_Tree* new_operand) : Expression_Tree(), operand {new_operand} {}
+    virtual Expression_Tree* clone() const override =0;
 
 protected:
     Expression_Tree* operand;
 };
 
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-
 //-*-*-*-*- Assign -*-*-*-*-
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
 class Assign : public Binary_Operator
 {
 public:
     Assign() = default;
+    Assign(Expression_Tree* newleftNode, Expression_Tree* newrightNode);
     virtual ~Assign() = default;
+
     virtual long double evaluate() const override;
     virtual Expression_Tree* clone() const override;
-
-    Assign(Expression_Tree* newleftNode, Expression_Tree* newrightNode);
 };
 
+//-*-*-*-*-*-*-*-*-*-*-*-*-
 //-*-*-*-*- Plus -*-*-*-*-
+//-*-*-*-*-*-*-*-*-*-*-*-*-
+
 class Plus : public Binary_Operator
 {
 public:
     Plus() = default;
+    Plus(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "+") {}
     virtual ~Plus() = default;
+
     virtual long double evaluate() const override;
     virtual Expression_Tree* clone() const override;
-
-    Plus(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "+") {}
 };
 
+//-*-*-*-*-*-*-*-*-*-*-*-*-
 //-*-*-*-*- Minus -*-*-*-*-
+//-*-*-*-*-*-*-*-*-*-*-*-*-
+
 class Minus : public Binary_Operator
 {
 public:
     Minus() = default;
+    Minus(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "-") {}
     virtual ~Minus() = default;
+
     virtual long double evaluate() const override;
     virtual Expression_Tree* clone() const override;
-
-    Minus(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "-") {}
 };
 
+//-*-*-*-*-*-*-*-*-*-*-*-*-
 //-*-*-*-*- Times -*-*-*-*-
+//-*-*-*-*-*-*-*-*-*-*-*-*-
+
 class Times : public Binary_Operator
 {
 public:
     Times() = default;
+    Times(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "*") {}
     virtual ~Times() = default;
+
     virtual long double evaluate() const override;
     virtual Expression_Tree* clone() const override;
-
-    Times(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "*") {}
 };
 
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-
 //-*-*-*-*- Divide -*-*-*-*-
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
 class Divide : public Binary_Operator
 {
 public:
     Divide() = default;
+    Divide(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "/") {}
     virtual ~Divide() = default;
+
     virtual long double evaluate() const override;
     virtual Expression_Tree* clone() const override;
-
-    Divide(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "/") {}
 };
 
+//-*-*-*-*-*-*-*-*-*-*-*-*-
 //-*-*-*-*- Power -*-*-*-*-
+//-*-*-*-*-*-*-*-*-*-*-*-*-
+
 class Power: public Binary_Operator
 {
 public:
     Power() = default;
+    Power(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "^") {}
     virtual ~Power() = default;
+
     virtual long double evaluate() const override;
     virtual Expression_Tree* clone() const override;
-
-    Power(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "^") {}
 };
 
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-
 //-*-*-*-*- Integer -*-*-*-*-
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
 class Integer : public Operand
 {
 public:
+    Integer(long int value = 0) : Operand() , _value {value} {}
     virtual ~Integer() = default;
 
     virtual long double      evaluate() const override;
-    virtual std::string      get_postfix() const override;
-    virtual std::string      get_infix() const override;
     virtual std::string      str() const override;
-    virtual void             print(std::ostream& os, int depth = 0) const override;
+    //virtual void             print(std::ostream&os) const override;
+    virtual void             print(std::ostream&, int depth = 0) const override;
     virtual Expression_Tree* clone() const override;
-
-    Integer(long int value = 0) : Operand() , _value {value} {}
 
 private:
     long int _value {0};
 };
 
+//-*-*-*-*-*-*-*-*-*-*-*-*-
 //-*-*-*-*- Real -*-*-*-*-
+//-*-*-*-*-*-*-*-*-*-*-*-*-
+
 class Real : public Operand
 {
 public:
-    virtual ~Real() = default;
-    virtual long double      evaluate() const override;
-    virtual std::string      get_postfix() const override;
-    virtual std::string      get_infix() const override;
-    virtual std::string      str() const override;
-    virtual void             print(std::ostream& os, int depth = 0) const override;
-    virtual Expression_Tree* clone() const override;
-
     Real(long double value = 0) : Operand(), _value {value} {}
+    virtual ~Real() = default;
+
+    virtual long double      evaluate() const override;
+    virtual std::string      str() const override;
+    //virtual void             print(std::ostream&os) const override;
+    virtual void             print(std::ostream&, int depth = 0) const override;
+    virtual Expression_Tree* clone() const override;
 
 private:
     long double _value {0};
 };
 
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 //-*-*-*-*- Variable -*-*-*-*-
+//-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
 class Variable : public Operand
 {
 public:
     Variable() = default;
+    Variable(std::string str, long double value, Variable_Table* v_table)
+        : Operand(), _str(str), _value(value), ref_v_table(v_table) {}
+
     virtual ~Variable() = default;
 
     virtual long double      evaluate() const override;
     virtual std::string      str() const override;
-    virtual std::string      get_postfix() const override;
-    virtual std::string      get_infix() const override;
-    virtual void             print(std::ostream& os, int depth = 0) const override;
+    //virtual void             print(std::ostream&os) const override;
+    virtual void             print(std::ostream&, int depth = 0) const override;
     virtual Expression_Tree* clone() const override;
 
     long double get_value() const;
@@ -228,7 +257,7 @@ public:
 
 private:
     std::string _str {""};
-    long double _value {0};
+    long double _value{0};
     Variable_Table* ref_v_table;
 };
 
