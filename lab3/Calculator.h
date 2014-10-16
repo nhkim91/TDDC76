@@ -4,6 +4,7 @@
 #ifndef CALCULATOR_H
 #define CALCULATOR_H
 #include "Expression.h"
+#include "Variable_Table.h"
 #include <iosfwd>
 
 /**
@@ -40,6 +41,8 @@ private:
    void execute_command();
 
    void read_expression(std::istream&);
+
+    Variable_Table* v_table = new Variable_Table;
 };
 
 #endif

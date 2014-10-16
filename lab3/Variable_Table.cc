@@ -1,68 +1,67 @@
 #include "Variable_Table.h"
 #include <map>
 #include <string>
-#include <iostream>
 #include <stdexcept>
-
-
+#include <iostream>
 
 using namespace std;
 
 void Variable_Table::insert(string name, long double value)
 {
-    v_table.insert(pair <string, double> (name, value));
+    v_table.insert(pair<string, double> (name, value));
 }
 
-void Variable_Table::remove(std::string name)
+void Variable_Table::remove(string name)
 {
     v_table.erase(name);
 }
 
-bool Variable_Table::find(std::string name) const
+bool Variable_Table::find(string name) const
 {
     return v_table.count(name);
 }
 
-void Variable_Table::list(ostream& os) const
+void Variable_Table::set_value(string name, long double value)
 {
-    if (empty())
+    if(find(name))
     {
-        throw Variabel_Table_error("The variable don't exist!");
+        v_table[name] = value;
+    }
+    else
+        throw variable_table_error{"The variable doesn't exist!"};
+}
+
+long double Variable_Table::get_value(string name) const
+{
+    return v_table.find(name)->second;
+}
+
+
+void Variable_Table::list(std::ostream &os) const
+{
+    if(empty())
+    {
+        throw variable_table_error{""};
     }
     else
     {
         map<string, long double>::const_iterator it;
-        for (it = v_table.begin(); it != v_table.end(); it++)
+        for(it = v_table.begin(); it != v_table.end(); it++)
         {
             os << it->first << ": " << it->second << endl;
         }
     }
 }
 
-long double Variable_Table::get_value(string name) const
-{
-    return (v_table.find(name))->second;
-}
 
-void Variable_Table::set_value(std::string name, long double value)
-{
-    if (find(name))
-    {
-        v_table[name] = value;
-    }
-    else
-    {
-        throw Variabel_Table_error("The variable don't exist!");
-    }
-}
-
-void Variable_Table::clear() noexcept
+void Variable_Table::clear()
 {
     v_table.clear();
 }
 
-//Empty
+
 bool Variable_Table::empty() const
 {
     return v_table.empty();
 }
+

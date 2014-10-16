@@ -349,7 +349,7 @@ std::string make_postfix(const std::string& infix)
 
 // make_expression_tree tar en postfixsträng och returnerar ett motsvarande
 // länkat träd av Expression_Tree-noder.
-Expression_Tree* make_expression_tree(const std::string& postfix)
+Expression_Tree* make_expression_tree(const std::string& postfix, Variable_Table* v_table)
 {
     using std::stack;
     using std::string;
@@ -412,7 +412,7 @@ Expression_Tree* make_expression_tree(const std::string& postfix)
         }
         else if (is_identifier(token))
         {
-            tree_stack.push(new Variable{token});
+            tree_stack.push(new Variable{token, std::stold(token.c_str()), v_table});
         }
         else
         {
@@ -441,7 +441,7 @@ Expression_Tree* make_expression_tree(const std::string& postfix)
 }
 } // namespace
 
-Expression make_expression(const string& infix)
+Expression make_expression(const string& infix, Variable_Table* v_table)
 {
-    return Expression{make_expression_tree(make_postfix(infix))};
+    return Expression{make_expression_tree(make_postfix(infix), v_table)};
 }

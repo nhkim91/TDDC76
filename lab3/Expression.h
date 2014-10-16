@@ -6,6 +6,7 @@
 #include <iosfwd>
 #include <stdexcept>
 #include <string>
+#include "Variable_Table.h"
 
 /**
  * expression_error: kastas om fel inträffar i en Expression- operation;
@@ -64,6 +65,6 @@ void swap(Expression&, Expression&);
  * make_expression: Hjälpfunktion för att skapa ett Expression-objekt, givet
  * ett infixuttryck i form av en sträng.
  */
-Expression make_expression(const std::string& infix);
+Expression make_expression(const std::string& infix, Variable_Table*);
 
 #endif
