@@ -48,20 +48,20 @@ print_help()
    cout << "  H, ?  Skriv ut denna information\n";
    cout << "  U     Mata in ett nytt uttryck\n";
    cout << "  B     Beräkna aktuellt uttryck\n";
-   cout << "  B n   Beräkna uttryck n";
+   cout << "  B n   Beräkna uttryck n\n";
    cout << "  P     Visa aktuellt uttryck som postfix\n";
-   cout << "  P n   Visa uttryck n som postfix";
-   cout << "  I     Visa aktuellt uttryck som infix";
-   cout << "  I n   Visa uttryck n som infix";
-   cout << "  L     Lista alla uttryck som infix";
+   cout << "  P n   Visa uttryck n som postfix\n";
+   cout << "  I     Visa aktuellt uttryck som infix\n";
+   cout << "  I n   Visa uttryck n som infix\n";
+   cout << "  L     Lista alla uttryck som infix\n";
    cout << "  T     Visa aktuellt uttryck som träd\n";
-   cout << "  T n   Visa uttryck n som ett träd";
-   cout << "  N     Visa antal lagrade uttryck";
-   cout << "  A n   Gör uttryck n till aktuellt uttryck";
-   cout << "  R     Radera aktuellt uttryck";
-   cout << "  R n   Radera uttryck n";
-   cout << "  V     Lista alla variabler";
-   cout << "  X     Radera alla variabler";
+   cout << "  T n   Visa uttryck n som ett träd\n";
+   cout << "  N     Visa antal lagrade uttryck\n";
+   cout << "  A n   Gör uttryck n till aktuellt uttryck\n";
+   cout << "  R     Radera aktuellt uttryck\n";
+   cout << "  R n   Radera uttryck n\n";
+   cout << "  V     Lista alla variabler\n";
+   cout << "  X     Radera alla variabler\n";
    cout << "  S     Avsluta kalkylatorn\n";
 
 }

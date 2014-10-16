@@ -6,6 +6,7 @@
 #include <iosfwd>
 #include <string>
 #include <stdexcept>
+#include "Variable_Table.h"
 
 /*
  * expression_tree_error: kastas om ett fel inträffar i en Expression-operation;
@@ -222,7 +223,8 @@ public:
     long double get_value() const;
     void set_value(long double new_val);
 
-    Variable(std::string str) : Operand(), _str {str} {}
+    Variable(std::string str, long double value, Variable_Table* v_table)
+        : Operand(), _str {str}, _value{value}, ref_v_table{v_table} {}
 
 private:
     std::string _str {""};

@@ -404,7 +404,7 @@ Expression_Tree* make_expression_tree(const std::string& postfix, Variable_Table
         }
         else if (is_integer(token))
         {
-            tree_stack.push(new Integer{std::stoll(token.c_str())});
+            tree_stack.push(new Integer{std::stol(token.c_str())});
         }
         else if (is_real(token))
         {
