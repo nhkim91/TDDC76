@@ -445,3 +445,4 @@ Expression make_expression(const string& infix, Variable_Table* v_table)
 {
     return Expression{make_expression_tree(make_postfix(infix), v_table)};
 }
+
