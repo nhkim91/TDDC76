@@ -285,7 +285,7 @@ void Variable::set_value(long double new_val)
 }
 */
 
-void Variable::set_value(double new_val)
+void Variable::set_value(long double new_val)
 {   
     _value = new_val;
     if(ref_v_table->find(_str))

@@ -252,9 +252,6 @@ public:
     long double get_value() const;
     void set_value(long double new_val);
 
-    Variable(std::string str, long double value, Variable_Table* v_table)
-        : Operand(), _str {str}, _value{value}, ref_v_table{v_table} {}
-
 private:
     std::string _str {""};
     long double _value{0};
