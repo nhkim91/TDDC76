@@ -29,17 +29,24 @@ Expression::Expression(class Expression_Tree* tree)
 //}
 
 //Destruktor
-/*Expression::~Expression()
+/*
+Expression::~Expression()
 {
+    //delete first_node;
+    /*
     if (first_node != nullptr)
     {
+        cout << "Nu har en icke-tom nod raderats!" << endl;
         delete first_node;
         first_node = nullptr;
     }
     else
     {
-        throw
+        cout << "Nu har en tom nod raderats!" << endl;
+        delete first_node;
+        //throw expression_error{"!!!!!!!!!!!!"};
     }
+
 }
 */
 
@@ -93,7 +100,7 @@ long double Expression::evaluate() const
 /*
  * get_postfix()
  */
-std::string Expression::get_postfix() const
+string Expression::get_postfix() const
 {
     if(first_node == nullptr)
     {
@@ -101,6 +108,19 @@ std::string Expression::get_postfix() const
     }
     else
         return first_node->get_postfix();
+}
+
+/*
+ * get_infix()
+ */
+string Expression::get_infix() const
+{
+    if(first_node == nullptr)
+    {
+        return "";
+    }
+    else
+        return first_node->get_infix();
 }
 
 /*
@@ -434,7 +454,7 @@ Expression_Tree* make_expression_tree(const std::string& postfix, Variable_Table
         }
         else if (is_identifier(token))
         {
-            tree_stack.push(new Variable{token, std::stold(token.c_str()), v_table});
+            tree_stack.push(new Variable{token, v_table});
         }
         else
         {
@@ -462,11 +482,6 @@ Expression_Tree* make_expression_tree(const std::string& postfix, Variable_Table
     return tree_stack.top();
 }
 } // namespace
-
-//Expression make_expression(const string& infix)
-//{
-//   return Expression{make_expression_tree(make_postfix(infix))};
-//}
 
 Expression make_expression(const string& infix, Variable_Table* v_table)
 {

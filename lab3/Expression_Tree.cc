@@ -76,6 +76,8 @@ long double Assign::evaluate() const
     Variable* leftNode = dynamic_cast<Variable*>(left_val);
     leftNode->set_value(right_val->evaluate()); //set_value() för Variable.
 
+    //vt->set_value(leftNode->str(), leftNode->get_value()); //set_value() för Variable_Table.
+
     return leftNode->get_value();
 }
 
@@ -206,13 +208,12 @@ Expression_Tree* Real::clone() const
 //-*-*-*-*- Variable -*-*-*-*-
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-Variable::Variable(std::string str, long double value, Variable_Table* v_table)
+Variable::Variable(std::string str, Variable_Table* v_table)
 {
     _str = str;
-    _value = value;
     ref_v_table = v_table;
 
-    ref_v_table->insert(str, value);
+    ref_v_table->insert(str, _value);
 }
 
 long double Variable::evaluate() const

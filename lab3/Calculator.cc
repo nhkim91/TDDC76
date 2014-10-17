@@ -7,9 +7,11 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include <vector>
+
 using namespace std;
 
-const string Calculator::valid_cmds_("?HUBPTS");
+const string Calculator::valid_cmds_("?HUBPTSILARVXN");
 
 /**
  * run: Huvudfunktionen för kalkylatorn. Skriver ut hjälpinformation
@@ -112,7 +114,7 @@ execute_command()
         read_expression(cin);
     else if (command_ == 'B')
         cout << current_expression_.evaluate() << "\n";
-    else if (command_ == 'B' && n > 0)
+    /*else if (command_ == 'B' && n > 0)
         cout << current_expression_. << "\n";
     else if (command_ == 'P')
         cout << current_expression_.get_postfix() << "\n";
@@ -121,10 +123,11 @@ execute_command()
     else if (command_ == 'I')
         cout << current_expression_.get_infix() << "\n";
     else if (command_ == 'I n')
-        cout << current_expression_. << "\n";
+        cout << current_expression_. << "\n";*/
     else if (command_ == 'L')
-        cout << current_expression_. << "\n";
-    else if (command_ == 'T')
+        list_infix();
+        //cout << current_expression_. << "\n";
+   /* else if (command_ == 'T')
         current_expression_.print_tree(cout);
     else if (command_ == 'T n')
         cout << current_expression_ << "\n";
@@ -139,7 +142,7 @@ execute_command()
     else if (command_ == 'V')
         cout << current_expression_.str() << "\n";
     else if (command_ == 'X')
-        cout << current_expression_.clear << "\n";
+        cout << current_expression_.clear << "\n";*/
     else if (command_ == 'S')
         cout << "Kalkylatorn avlutas, välkommen åter!\n";
     else
@@ -162,9 +165,49 @@ read_expression(istream& is)
     if (getline(is, infix))
     {
         current_expression_ = make_expression(infix, v_table);
+        expressions.push_back(current_expression_);
     }
     else
     {
         cout << "Felaktig inmatning!\n";
     }
 }
+
+
+void Calculator::list_infix() const
+{
+    cout << expressions[0].get_infix();
+    for(unsigned int it = 0; it < expressions.size(); it++)
+    {
+        cout << it << ": " << expressions[it].get_infix() << endl;
+    }
+}
+
+/*
+map<string, long double>::const_iterator it;
+for(it = v_table.begin(); it != v_table.end(); it++)
+{
+    os << it->first << ": " << it->second << endl;
+}
+*/
+
+
+/*  //cout << "  H, ?  Skriv ut denna information\n";
+    //cout << "  U     Mata in ett nytt uttryck\n";
+    //cout << "  B     Beräkna aktuellt uttryck\n";
+    cout << "  B n   Beräkna uttryck n\n";
+    //cout << "  P     Visa aktuellt uttryck som postfix\n";
+    cout << "  P n   Visa uttryck n som postfix\n";
+    //cout << "  I     Visa aktuellt uttryck som infix\n";
+    cout << "  I n   Visa uttryck n som infix\n";
+    cout << "  L     Lista alla uttryck som infix\n";
+    cout << "  T     Visa aktuellt uttryck som träd\n";
+    cout << "  T n   Visa uttryck n som ett träd\n";
+    cout << "  N     Visa antal lagrade uttryck\n";
+    cout << "  A n   Gör uttryck n till aktuellt uttryck\n";
+    cout << "  R     Radera aktuellt uttryck\n";
+    cout << "  R n   Radera uttryck n\n";
+    cout << "  V     Lista alla variabler\n";
+    cout << "  X     Radera alla variabler\n";
+    //cout << "  S     Avsluta kalkylatorn\n";
+    */

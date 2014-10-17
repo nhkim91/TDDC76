@@ -112,7 +112,6 @@ public:
     virtual ~Assign() = default;
 
     virtual long double evaluate() const override;
-    //virtual long double evaluate() const override;
     virtual Expression_Tree* clone() const override;
 };
 
@@ -239,7 +238,7 @@ class Variable : public Operand
 {
 public:
     Variable() = default;
-    Variable(std::string str, long double value, Variable_Table* v_table);
+    Variable(std::string str, Variable_Table* v_table);
 
     virtual ~Variable() = default;
 

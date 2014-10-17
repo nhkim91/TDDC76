@@ -32,10 +32,14 @@ void Variable_Table::set_value(string name, long double value)
         throw variable_table_error{"The variable doesn't exist!"};
 }
 
-//Vi ska inte ha "om variabeln inte finns"?
 long double Variable_Table::get_value(string name) const
 {
-    return v_table.find(name)->second;
+    if(find(name))
+    {
+        return v_table.find(name)->second;
+    }
+    else
+        throw variable_table_error{"The variable doesn't exist!"};
 }
 
 
@@ -43,7 +47,8 @@ void Variable_Table::list(std::ostream &os) const
 {
     if(empty())
     {
-        throw variable_table_error{"The Variable_Table is empty!"};
+        return;
+        //throw variable_table_error{"The Variable_Table is empty!"};
     }
     else
     {
