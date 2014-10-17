@@ -21,10 +21,10 @@ class expression_tree_error: public std::logic_error
 {
 public:
     explicit expression_tree_error(const std::string& what_arg) noexcept
-        : std::logic_error(what_arg) {}
+: std::logic_error(what_arg) {}
 
     explicit expression_tree_error(const char* what_arg) noexcept
-        : std::logic_error(what_arg) {}
+: std::logic_error(what_arg) {}
 };
 
 
@@ -94,7 +94,7 @@ public:
     virtual std::string      str() const override = 0;
     //virtual void             print(std::ostream&) const override = 0;
     virtual void             print(std::ostream&, int) const override = 0;
-    virtual Expression_Tree* clone() const override =0;
+    virtual Expression_Tree* clone() const override = 0;
 
 protected:
     Expression_Tree* operand;
@@ -254,7 +254,7 @@ public:
 
 private:
     std::string _str {""};
-    long double _value{0};
+    long double _value {0};
     Variable_Table* ref_v_table;
 };
 

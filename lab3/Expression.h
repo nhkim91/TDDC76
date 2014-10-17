@@ -20,10 +20,10 @@ class expression_error: public std::logic_error
 {
 public:
     explicit expression_error(const std::string& what_arg) noexcept
-        : std::logic_error(what_arg) {}
+: std::logic_error(what_arg) {}
 
     explicit expression_error(const char* what_arg) noexcept
-        : std::logic_error(what_arg) {}
+: std::logic_error(what_arg) {}
 };
 
 /**
@@ -44,7 +44,7 @@ public:
 
     //Kopieringstilldelning, flytt-tilldelning
     Expression& operator=(const Expression&) &;
-    Expression& operator=(Expression&&) &;
+    Expression& operator=(Expression &&) &;
 
     long double evaluate() const;
     std::string get_postfix() const;
@@ -53,7 +53,7 @@ public:
     void        swap(Expression&);
 
 private:
-    Expression_Tree* first_node{nullptr};
+    Expression_Tree* first_node {nullptr};
 };
 
 /**

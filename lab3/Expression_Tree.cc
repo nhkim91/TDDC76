@@ -22,7 +22,13 @@ string Binary_Operator::get_postfix() const
 
 string Binary_Operator::get_infix() const
 {
-    return " (" + left_val->get_infix() + " " + _str + " " + right_val->get_infix() + ")";
+
+    if (_str == "=" || _str == "+" || _str == "-")
+    {
+        return left_val->get_infix() + " " + _str + " " + right_val->get_infix();
+    }
+    else
+        return "(" + left_val->get_infix() + " " + _str + " " + right_val->get_infix() + ")";
 }
 
 string Binary_Operator::str() const
@@ -66,15 +72,6 @@ Assign::Assign(Expression_Tree* newleftNode, Expression_Tree* newrightNode)
     }
 }
 
-/*
-Assign::Assign(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "=")
-{
-    if(!(isalpha(newleftNode->str()[0]) || newleftNode->str().size()== 1))
-    {
-        throw expression_tree_error("You need to enter a variable to the left of = ");
-    }
-}
-*/
 
 long double Assign::evaluate() const
 {
@@ -82,13 +79,6 @@ long double Assign::evaluate() const
     leftNode->set_value(right_val->evaluate());
 
     return leftNode->get_value();
-    /*
-    long double new_val{right_val->evaluate()};
-    Variable* var = dynamic_cast<Variable*>(left_val);
-    var->set_value(new_val);
-    return var->get_value();
-    //return var->str()[0] = new_val;
-    */
 }
 
 Expression_Tree* Assign::clone() const
@@ -180,13 +170,6 @@ string Integer::str() const
     return to_string(_value);
 }
 
-/*
-void Integer::print(ostream& os) const
-{
-    os << _value;
-}
-*/
-
 void Integer::print(ostream& os, int depth) const
 {
     os << string(depth + 1, ' ') << _value;
@@ -211,13 +194,6 @@ string Real::str() const
     return to_string(_value);
 }
 
-/*
-void Real::print(ostream& os) const
-{
-    os << _value;
-}
-*/
-
 void Real::print(ostream& os, int depth) const
 {
     os << string(depth + 1, ' ') << _value;
@@ -231,36 +207,20 @@ Expression_Tree* Real::clone() const
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 //-*-*-*-*- Variable -*-*-*-*-
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-
-//Ändrat! Kolla!
-/*
 long double Variable::evaluate() const
 {
-    return _value;
-}
-*/
-
-long double Variable::evaluate() const
-{
-    if(ref_v_table->find(_str))
+    if (ref_v_table->find(_str))
     {
         return ref_v_table->get_value(_str);
     }
     else
-        throw expression_tree_error{"Variable name doesn't exist!"};
+        throw expression_tree_error {"Variable name doesn't exist!"};
 }
 
 string Variable::str() const
 {
     return _str;
 }
-
-/*
-void Variable::print(ostream& os) const
-{
-    os << _str;
-}
-*/
 
 void Variable::print(ostream& os, int depth) const
 {
@@ -277,21 +237,13 @@ long double Variable::get_value() const
     return _value;
 }
 
-//Ändrat! Kolla!
-/*
 void Variable::set_value(long double new_val)
 {
     _value = new_val;
-}
-*/
-
-void Variable::set_value(long double new_val)
-{   
-    _value = new_val;
-    if(ref_v_table->find(_str))
+    if (ref_v_table->find(_str))
     {
         ref_v_table->set_value(_str, _value);
     }
     else
-        throw expression_tree_error{"Variable name doesn't exist!"};
+        throw expression_tree_error {"Variable name doesn't exist!"};
 }

@@ -9,7 +9,7 @@
 
 /**
  * Calculator: klass för att läsa in, lagra och bearbeta enkla aritmetiska
- * uttryck. För att använda kalylatorn - skapa ett Calculator-objekt och 
+ * uttryck. För att använda kalylatorn - skapa ett Calculator-objekt och
  * anropa run().
  *
  * Anm: move-konstruktorn och move-illdelningsoperatorn genereras inte om
@@ -19,28 +19,28 @@
 class Calculator
 {
 public:
-   Calculator() = default;
-   ~Calculator() = default;
+    Calculator() = default;
+    ~Calculator() = default;
 
-   Calculator(const Calculator&) = delete;
-   Calculator& operator=(const Calculator&) = delete;
+    Calculator(const Calculator&) = delete;
+    Calculator& operator=(const Calculator&) = delete;
 
-   void run();
+    void run();
 
 private:
-   static const std::string valid_cmds_;
+    static const std::string valid_cmds_;
 
-   Expression current_expression_;
+    Expression current_expression_;
 
-   char command_;
+    char command_;
 
-   static void print_help();
+    static void print_help();
 
-   void get_command();
-   bool valid_command() const;
-   void execute_command();
+    void get_command();
+    bool valid_command() const;
+    void execute_command();
 
-   void read_expression(std::istream&);
+    void read_expression(std::istream&);
 
     Variable_Table* v_table = new Variable_Table;
 };
