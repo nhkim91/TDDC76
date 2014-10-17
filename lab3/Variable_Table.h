@@ -18,10 +18,10 @@ class variable_table_error: public std::logic_error
 {
 public:
     explicit variable_table_error(const std::string& what_arg) noexcept
-: std::logic_error(what_arg) {}
+        : std::logic_error(what_arg) {}
 
     explicit variable_table_error(const char* what_arg) noexcept
-: std::logic_error(what_arg) {}
+        : std::logic_error(what_arg) {}
 };
 
 class Variable_Table

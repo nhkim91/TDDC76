@@ -38,8 +38,9 @@ public:
     Expression_Tree() = default;
     Expression_Tree(const Expression_Tree&) = default;
     virtual ~Expression_Tree() = default;
+    Expression_Tree(Expression_Tree&&) = default;
 
-    virtual long double      evaluate(Variable_Table*) const = 0;
+    virtual long double      evaluate() const = 0;
     virtual std::string      get_postfix() const = 0;
     virtual std::string      get_infix() const = 0;
     virtual std::string      str() const = 0;
@@ -62,7 +63,7 @@ public:
         delete right_val;
     }
 
-    virtual long double      evaluate(Variable_Table*) const override = 0;
+    virtual long double      evaluate() const override = 0;
     virtual std::string      get_postfix() const override;
     virtual std::string      get_infix() const override;
     virtual std::string      str() const override;
@@ -85,8 +86,10 @@ public:
     Operand() = default;
     Operand(Expression_Tree* new_operand) : Expression_Tree(), operand {new_operand} {}
     virtual ~Operand() = default;
+    Operand(const Operand&) = default;
+    Operand(Operand&&) = default;
 
-    virtual long double      evaluate(Variable_Table*) const override = 0;
+    virtual long double      evaluate() const override = 0;
     virtual std::string      get_postfix() const override;
     virtual std::string      get_infix() const override;
     virtual std::string      str() const override = 0;
@@ -108,7 +111,7 @@ public:
     Assign(Expression_Tree* newleftNode, Expression_Tree* newrightNode);
     virtual ~Assign() = default;
 
-    virtual long double evaluate(Variable_Table*) const override;
+    virtual long double evaluate() const override;
     //virtual long double evaluate() const override;
     virtual Expression_Tree* clone() const override;
 };
@@ -124,7 +127,7 @@ public:
     Plus(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "+") {}
     virtual ~Plus() = default;
 
-    virtual long double evaluate(Variable_Table*) const override;
+    virtual long double evaluate() const override;
     virtual Expression_Tree* clone() const override;
 };
 
@@ -139,7 +142,7 @@ public:
     Minus(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "-") {}
     virtual ~Minus() = default;
 
-    virtual long double evaluate(Variable_Table*) const override;
+    virtual long double evaluate() const override;
     virtual Expression_Tree* clone() const override;
 };
 
@@ -154,7 +157,7 @@ public:
     Times(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "*") {}
     virtual ~Times() = default;
 
-    virtual long double evaluate(Variable_Table*) const override;
+    virtual long double evaluate() const override;
     virtual Expression_Tree* clone() const override;
 };
 
@@ -169,7 +172,7 @@ public:
     Divide(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "/") {}
     virtual ~Divide() = default;
 
-    virtual long double evaluate(Variable_Table*) const override;
+    virtual long double evaluate() const override;
     virtual Expression_Tree* clone() const override;
 };
 
@@ -184,7 +187,7 @@ public:
     Power(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "^") {}
     virtual ~Power() = default;
 
-    virtual long double evaluate(Variable_Table*) const override;
+    virtual long double evaluate() const override;
     virtual Expression_Tree* clone() const override;
 };
 
@@ -197,8 +200,10 @@ class Integer : public Operand
 public:
     Integer(long int value = 0) : Operand() , _value {value} {}
     virtual ~Integer() = default;
+    Integer(const Integer&) = default;
+    Integer(Integer&&) = default;
 
-    virtual long double      evaluate(Variable_Table*) const override;
+    virtual long double      evaluate() const override;
     virtual std::string      str() const override;
     virtual void             print(std::ostream&, int depth = 0) const override;
     virtual Expression_Tree* clone() const override;
@@ -217,7 +222,7 @@ public:
     Real(long double value = 0) : Operand(), _value {value} {}
     virtual ~Real() = default;
 
-    virtual long double      evaluate(Variable_Table*) const override;
+    virtual long double      evaluate() const override;
     virtual std::string      str() const override;
     virtual void             print(std::ostream&, int depth = 0) const override;
     virtual Expression_Tree* clone() const override;
@@ -239,7 +244,7 @@ public:
 
     virtual ~Variable() = default;
 
-    virtual long double      evaluate(Variable_Table*) const override;
+    virtual long double      evaluate() const override;
     virtual std::string      str() const override;
     virtual void             print(std::ostream&, int depth = 0) const override;
     virtual Expression_Tree* clone() const override;

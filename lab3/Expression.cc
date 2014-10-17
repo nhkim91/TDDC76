@@ -17,20 +17,40 @@ using namespace std;
 
 //Default-konstruktor
 Expression::Expression(class Expression_Tree* tree)
+    : first_node{tree}
 {
-    first_node = tree;
+    //delete first_node;
+    //first_node = tree;
 }
+
+//Expression::Expression(std::string infix, Variable_Table* vt)
+//{
+//    first_node = make_expression_tree(infix, vt);
+//}
 
 //Destruktor
 Expression::~Expression()
 {
-    delete first_node;
+    if (first_node != nullptr)
+    {
+        delete first_node;
+        first_node = nullptr;
+    }
+    else
+    {
+        //TODO throw ...
+    }
 }
 
 //Kopieringskonstruktor, flyttkonstruktor
 Expression::Expression(const Expression &e)
 {
-    first_node = e.first_node->clone();
+    if(e.empty())
+        throw expression_error{"The Expression-object doesn't have an Expression_Tree-object!"};
+    else
+    {
+        first_node = e.first_node->clone();
+    }
 }
 
 
@@ -38,6 +58,7 @@ Expression::Expression(Expression&& e) noexcept
 {
     swap(e);
 }
+
 
 //Kopieringstilldelning, flytt-tilldelning
 Expression& Expression::operator=(const Expression &rhs) &
@@ -58,14 +79,14 @@ Expression& Expression::operator=(Expression&& rhs) &
 /*
  * evaluate()
  */
-long double Expression::evaluate(Variable_Table* vt) const
+long double Expression::evaluate() const
 {
-    if(first_node == nullptr)
+    if(empty())
     {
         throw expression_error{"The Expression-object doesn't have an Expression_Tree-object!"};
     }
     else
-        return first_node->evaluate(vt);
+        return first_node->evaluate();
 }
 
 /*
@@ -127,7 +148,7 @@ void swap(Expression &lhs, Expression &rhs)
 /*
  * make_expression() definieras efter namnrymden nedan.
  */
-Expression make_expression(const string& infix);
+//Expression make_expression(const string& infix, Variable_Table* v_table);
 
 // Namrymden nedan innehåller intern kod för infix-till-postfix-omvandling
 // och generering av uttrycksträd. En anonym namnrymd begränsar användningen
@@ -440,6 +461,11 @@ Expression_Tree* make_expression_tree(const std::string& postfix, Variable_Table
     return tree_stack.top();
 }
 } // namespace
+
+//Expression make_expression(const string& infix)
+//{
+//   return Expression{make_expression_tree(make_postfix(infix))};
+//}
 
 Expression make_expression(const string& infix, Variable_Table* v_table)
 {

@@ -71,11 +71,11 @@ Assign::Assign(Expression_Tree* newleftNode, Expression_Tree* newrightNode)
     }
 }
 
-long double Assign::evaluate(Variable_Table* vt) const
+long double Assign::evaluate() const
 {
     Variable* leftNode = dynamic_cast<Variable*>(left_val);
-    leftNode->set_value(right_val->evaluate(vt)); //set_value() för Variable.
-    vt->set_value(leftNode->str(), leftNode->get_value()); //set_value() för Variable_Table.
+    leftNode->set_value(right_val->evaluate()); //set_value() för Variable.
+    //vt->set_value(leftNode->str(), leftNode->get_value()); //set_value() för Variable_Table.
 
     return leftNode->get_value();
 }
@@ -89,9 +89,9 @@ Expression_Tree* Assign::clone() const
 //-*-*-*-*- Plus -*-*-*-*-
 //-*-*-*-*-*-*-*-*-*-*-*-*-
 
-long double Plus::evaluate(Variable_Table* vt) const
+long double Plus::evaluate() const
 {
-    return (left_val->evaluate(vt) + right_val->evaluate(vt));
+    return (left_val->evaluate() + right_val->evaluate());
 }
 
 Expression_Tree* Plus::clone() const
@@ -103,9 +103,9 @@ Expression_Tree* Plus::clone() const
 //-*-*-*-*- Minus -*-*-*-*-
 //-*-*-*-*-*-*-*-*-*-*-*-*-
 
-long double Minus::evaluate(Variable_Table* vt) const
+long double Minus::evaluate() const
 {
-    return (left_val->evaluate(vt) - right_val->evaluate(vt));
+    return (left_val->evaluate() - right_val->evaluate());
 }
 
 Expression_Tree* Minus::clone() const
@@ -117,9 +117,9 @@ Expression_Tree* Minus::clone() const
 //-*-*-*-*- Times -*-*-*-*-
 //-*-*-*-*-*-*-*-*-*-*-*-*-
 
-long double Times::evaluate(Variable_Table* vt) const
+long double Times::evaluate() const
 {
-    return (left_val->evaluate(vt) * right_val->evaluate(vt));
+    return (left_val->evaluate() * right_val->evaluate());
 }
 
 Expression_Tree* Times::clone() const
@@ -131,9 +131,9 @@ Expression_Tree* Times::clone() const
 //-*-*-*-*- Divide -*-*-*-*-
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-long double Divide::evaluate(Variable_Table* vt) const
+long double Divide::evaluate() const
 {
-    return (left_val->evaluate(vt) / right_val->evaluate(vt));
+    return (left_val->evaluate() / right_val->evaluate());
 }
 
 Expression_Tree* Divide::clone() const
@@ -145,9 +145,9 @@ Expression_Tree* Divide::clone() const
 //-*-*-*-*- Power -*-*-*-*-
 //-*-*-*-*-*-*-*-*-*-*-*-*-
 
-long double Power::evaluate(Variable_Table* vt) const
+long double Power::evaluate() const
 {
-    return pow(left_val->evaluate(vt), right_val->evaluate(vt));
+    return pow(left_val->evaluate(), right_val->evaluate());
 }
 
 Expression_Tree* Power::clone() const
@@ -159,7 +159,7 @@ Expression_Tree* Power::clone() const
 //-*-*-*-*- Integer -*-*-*-*-
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-long double Integer::evaluate(Variable_Table* vt) const
+long double Integer::evaluate() const
 {
     return _value;
 }
@@ -183,7 +183,7 @@ Expression_Tree* Integer::clone() const
 //-*-*-*-*- Real -*-*-*-*-
 //-*-*-*-*-*-*-*-*-*-*-*-*-
 
-long double Real::evaluate(Variable_Table* vt) const
+long double Real::evaluate() const
 {
     return _value;
 }
@@ -216,7 +216,7 @@ Variable::Variable(std::string str, long double value, Variable_Table* v_table)
     ref_v_table->insert(str, value);
 }
 
-long double Variable::evaluate(Variable_Table* vt) const
+long double Variable::evaluate() const
 {
     if(ref_v_table->find(_str))
     {

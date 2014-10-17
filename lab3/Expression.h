@@ -35,19 +35,20 @@ public:
 
     //Default-konstruktor
     Expression(class Expression_Tree* = nullptr);
+    //Expression(std::string infix, Variable_Table* vt = nullptr);
     //Destruktor
     ~Expression();
 
     //Kopieringskonstruktor, flyttkonstruktor
     Expression(const Expression &e);
-    Expression(std::string, Variable_Table*);
+    //Expression(std::string, Variable_Table*);
     Expression(Expression&&) noexcept;
 
     //Kopieringstilldelning, flytt-tilldelning
     Expression& operator=(const Expression&) &;
     Expression& operator=(Expression&&) &;
 
-    long double evaluate(Variable_Table*) const;
+    long double evaluate() const;
     std::string get_postfix() const;
     bool        empty() const;
     void        print_tree(std::ostream&) const;
@@ -55,7 +56,10 @@ public:
 
 private:
     Expression_Tree* first_node{nullptr};
-    Variable_Table* v_table = new Variable_Table;
+    //Variable_Table* v_table = new Variable_Table;
+    Variable_Table* v_table = nullptr;
+
+    //Expression_Tree* make_expression(const std::string& infix, Variable_Table* vt);
 };
 
 /**
@@ -67,6 +71,6 @@ void swap(Expression&, Expression&);
  * make_expression: Hjälpfunktion för att skapa ett Expression-objekt, givet
  * ett infixuttryck i form av en sträng.
  */
-Expression make_expression(const std::string& infix);
+Expression make_expression(const std::string& infix, Variable_Table* v_table);
 
 #endif
