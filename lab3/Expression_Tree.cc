@@ -22,8 +22,7 @@ string Binary_Operator::get_postfix() const
 
 string Binary_Operator::get_infix() const
 {
-
-    if (_str == "=" || _str == "+" || _str == "-")
+    if(_str == "=" || _str == "+" || _str == "-")
     {
         return left_val->get_infix() + " " + _str + " " + right_val->get_infix();
     }
@@ -72,11 +71,11 @@ Assign::Assign(Expression_Tree* newleftNode, Expression_Tree* newrightNode)
     }
 }
 
-
-long double Assign::evaluate() const
+long double Assign::evaluate(Variable_Table* vt) const
 {
     Variable* leftNode = dynamic_cast<Variable*>(left_val);
-    leftNode->set_value(right_val->evaluate());
+    leftNode->set_value(right_val->evaluate(vt)); //set_value() för Variable.
+    vt->set_value(leftNode->str(), leftNode->get_value()); //set_value() för Variable_Table.
 
     return leftNode->get_value();
 }
@@ -90,9 +89,9 @@ Expression_Tree* Assign::clone() const
 //-*-*-*-*- Plus -*-*-*-*-
 //-*-*-*-*-*-*-*-*-*-*-*-*-
 
-long double Plus::evaluate() const
+long double Plus::evaluate(Variable_Table* vt) const
 {
-    return (left_val->evaluate() + right_val->evaluate());
+    return (left_val->evaluate(vt) + right_val->evaluate(vt));
 }
 
 Expression_Tree* Plus::clone() const
@@ -104,9 +103,9 @@ Expression_Tree* Plus::clone() const
 //-*-*-*-*- Minus -*-*-*-*-
 //-*-*-*-*-*-*-*-*-*-*-*-*-
 
-long double Minus::evaluate() const
+long double Minus::evaluate(Variable_Table* vt) const
 {
-    return (left_val->evaluate() - right_val->evaluate());
+    return (left_val->evaluate(vt) - right_val->evaluate(vt));
 }
 
 Expression_Tree* Minus::clone() const
@@ -118,9 +117,9 @@ Expression_Tree* Minus::clone() const
 //-*-*-*-*- Times -*-*-*-*-
 //-*-*-*-*-*-*-*-*-*-*-*-*-
 
-long double Times::evaluate() const
+long double Times::evaluate(Variable_Table* vt) const
 {
-    return (left_val->evaluate() * right_val->evaluate());
+    return (left_val->evaluate(vt) * right_val->evaluate(vt));
 }
 
 Expression_Tree* Times::clone() const
@@ -132,9 +131,9 @@ Expression_Tree* Times::clone() const
 //-*-*-*-*- Divide -*-*-*-*-
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-long double Divide::evaluate() const
+long double Divide::evaluate(Variable_Table* vt) const
 {
-    return (left_val->evaluate() / right_val->evaluate());
+    return (left_val->evaluate(vt) / right_val->evaluate(vt));
 }
 
 Expression_Tree* Divide::clone() const
@@ -146,9 +145,9 @@ Expression_Tree* Divide::clone() const
 //-*-*-*-*- Power -*-*-*-*-
 //-*-*-*-*-*-*-*-*-*-*-*-*-
 
-long double Power::evaluate() const
+long double Power::evaluate(Variable_Table* vt) const
 {
-    return pow(left_val->evaluate(), right_val->evaluate());
+    return pow(left_val->evaluate(vt), right_val->evaluate(vt));
 }
 
 Expression_Tree* Power::clone() const
@@ -160,7 +159,7 @@ Expression_Tree* Power::clone() const
 //-*-*-*-*- Integer -*-*-*-*-
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-long double Integer::evaluate() const
+long double Integer::evaluate(Variable_Table* vt) const
 {
     return _value;
 }
@@ -184,7 +183,7 @@ Expression_Tree* Integer::clone() const
 //-*-*-*-*- Real -*-*-*-*-
 //-*-*-*-*-*-*-*-*-*-*-*-*-
 
-long double Real::evaluate() const
+long double Real::evaluate(Variable_Table* vt) const
 {
     return _value;
 }
@@ -207,15 +206,26 @@ Expression_Tree* Real::clone() const
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 //-*-*-*-*- Variable -*-*-*-*-
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-long double Variable::evaluate() const
+
+Variable::Variable(std::string str, long double value, Variable_Table* v_table)
 {
-    if (ref_v_table->find(_str))
+    _str = str;
+    _value = value;
+    ref_v_table = v_table;
+
+    ref_v_table->insert(str, value);
+}
+
+long double Variable::evaluate(Variable_Table* vt) const
+{
+    if(ref_v_table->find(_str))
     {
         return ref_v_table->get_value(_str);
     }
     else
-        throw expression_tree_error {"Variable name doesn't exist!"};
+        throw expression_tree_error{"Variable name doesn't exist!"};
 }
+
 
 string Variable::str() const
 {
@@ -238,12 +248,12 @@ long double Variable::get_value() const
 }
 
 void Variable::set_value(long double new_val)
-{
+{   
     _value = new_val;
-    if (ref_v_table->find(_str))
+    if(ref_v_table->find(_str))
     {
         ref_v_table->set_value(_str, _value);
     }
     else
-        throw expression_tree_error {"Variable name doesn't exist!"};
+        throw expression_tree_error{"Variable name doesn't exist!"};
 }
