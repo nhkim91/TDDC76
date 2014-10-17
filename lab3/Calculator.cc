@@ -133,33 +133,36 @@ execute_command()
     if (command_ == 'H' || command_ == '?')
         print_help();
     else if (command_ == 'U')
+    {
         read_expression(cin);
+        n = expressions.size();
+    }
     else if (command_ == 'B' && n > 0)
         cout << expressions[n - 1].evaluate() << endl;
     else if (command_ == 'B')
-        cout << current_expression_.evaluate() << endl;
+        cout << expressions[n - 1].evaluate() << endl;
     else if (command_ == 'P' && n > 0)
         cout << expressions[n - 1].get_postfix() << endl;
     else if (command_ == 'P')
-        cout << current_expression_.get_postfix() << endl;
+        cout << expressions[n - 1].get_postfix() << endl;
     else if (command_ == 'I' && n > 0)
         cout << expressions[n - 1].get_infix() << endl;
     else if (command_ == 'I')
-        cout << current_expression_.get_infix() << endl;
+        cout << expressions[n - 1].get_infix() << endl;
     else if (command_ == 'L')
         list_infix();
     else if (command_ == 'T' && n > 0)
         expressions[n - 1].print_tree(cout);
     else if (command_ == 'T')
-        current_expression_.print_tree(cout);
+        expressions[n - 1].print_tree(cout);
     else if (command_ == 'N')
         cout << expressions.size() << endl;
     else if (command_ == 'A' && n > 0)
-        current_expression_ = expressions[n - 1];
-    else if (command_ == 'R')
-        expressions.pop_back();
+        expressions[n - 1] = expressions[n - 1];
     else if (command_ == 'R' && n > 0)
-        expressions.begin() + n - 1;
+        expressions.erase(expressions.begin() + n - 1);
+    else if (command_ == 'R')
+        expressions.erase(expressions.begin() + n - 1);
     else if (command_ == 'V')
         v_table->list(cout);
     else if (command_ == 'X')
@@ -185,17 +188,17 @@ read_expression(istream& is)
 
     if (getline(is, infix))
     {
-        current_expression_ = make_expression(infix, v_table);
+        //current_expression_ = make_expression(infix, v_table);
 
         //Lägger aktuellt uttryck längst bak i vektorn expressions
         expressions.push_back(make_expression(infix, v_table));
     }
-
     else
     {
         cout << "Felaktig inmatning!\n";
     }
 }
+
 
 //Skriver alla uttryck som infix
 void Calculator::list_infix() const

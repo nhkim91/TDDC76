@@ -38,7 +38,7 @@ private:
 
    Expression current_expression_;
    std::vector<Expression> expressions;
-   unsigned int n{0};
+   unsigned int n{1};
 
    char command_;
 

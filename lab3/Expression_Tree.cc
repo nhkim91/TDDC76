@@ -79,9 +79,7 @@ Assign::Assign(Expression_Tree* newleftNode, Expression_Tree* newrightNode)
 long double Assign::evaluate() const
 {
     Variable* leftNode = dynamic_cast<Variable*>(left_val);
-    leftNode->set_value(right_val->evaluate()); //set_value() för Variable.
-
-    //vt->set_value(leftNode->str(), leftNode->get_value()); //set_value() för Variable_Table.
+    leftNode->set_value(right_val->evaluate());
 
     return leftNode->get_value();
 }
