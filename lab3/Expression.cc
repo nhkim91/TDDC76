@@ -29,7 +29,7 @@ Expression::Expression(class Expression_Tree* tree)
 //}
 
 //Destruktor
-Expression::~Expression()
+/*Expression::~Expression()
 {
     if (first_node != nullptr)
     {
@@ -38,9 +38,10 @@ Expression::~Expression()
     }
     else
     {
-        //TODO throw ...
+        throw
     }
 }
+*/
 
 //Kopieringskonstruktor, flyttkonstruktor
 Expression::Expression(const Expression &e)

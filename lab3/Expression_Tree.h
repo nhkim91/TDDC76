@@ -240,7 +240,6 @@ class Variable : public Operand
 public:
     Variable() = default;
     Variable(std::string str, long double value, Variable_Table* v_table);
-    //: Operand(), _str(str), _value(value), ref_v_table(v_table) {}
 
     virtual ~Variable() = default;
 

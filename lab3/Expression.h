@@ -37,7 +37,7 @@ public:
     Expression(class Expression_Tree* = nullptr);
     //Expression(std::string infix, Variable_Table* vt = nullptr);
     //Destruktor
-    ~Expression();
+    ~Expression() = default;
 
     //Kopieringskonstruktor, flyttkonstruktor
     Expression(const Expression &e);

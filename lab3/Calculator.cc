@@ -112,7 +112,7 @@ execute_command()
         read_expression(cin);
     else if (command_ == 'B')
         cout << current_expression_.evaluate() << "\n";
-    else if (command_ == 'B n')
+    else if (command_ == 'B' && n > 0)
         cout << current_expression_. << "\n";
     else if (command_ == 'P')
         cout << current_expression_.get_postfix() << "\n";
