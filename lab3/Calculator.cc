@@ -135,17 +135,17 @@ execute_command()
     else if (command_ == 'U')
         read_expression(cin);
     else if (command_ == 'B' && n > 0)
-        expressions[n - 1].evaluate();
+        cout << expressions[n - 1].evaluate() << endl;
     else if (command_ == 'B')
-        cout << current_expression_.evaluate() << "\n";
+        cout << current_expression_.evaluate() << endl;
     else if (command_ == 'P' && n > 0)
         cout << expressions[n - 1].get_postfix() << endl;
     else if (command_ == 'P')
-        cout << current_expression_.get_postfix() << "\n";
+        cout << current_expression_.get_postfix() << endl;
     else if (command_ == 'I' && n > 0)
         cout << expressions[n - 1].get_infix() << endl;
     else if (command_ == 'I')
-        cout << current_expression_.get_infix() << "\n";
+        cout << current_expression_.get_infix() << endl;
     else if (command_ == 'L')
         list_infix();
     else if (command_ == 'T' && n > 0)
@@ -165,9 +165,9 @@ execute_command()
     else if (command_ == 'X')
         v_table->clear();
     else if (command_ == 'S')
-        cout << "Kalkylatorn avlutas, välkommen åter!\n";
+        cout << "Kalkylatorn avlutas, välkommen åter!" << endl;
     else
-        cout << "Detta ska inte hända!\n";
+        cout << "Detta ska inte hända!" << endl;
 }
 
 /**

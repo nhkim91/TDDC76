@@ -2,11 +2,12 @@
 # Makefile för kalkylatorn, nivå G, GNU GCC (g++)
 #
 # Filkataloger där andra delar av programet finns.
-EXPRESSION = ../Expression
+#
+EXPRESSION = .
 
 # Diagnosmeddelanden från kompilatorn (g++) filtreras av gccfilter.
-#CCC = gccfilter -c -a g++
-CCC = g++
+CCC = gccfilter -c -a g++
+
 
 # Kompilatorflaggor, lägg till '-g' om kompilering för avlusning ska göras.
 CCFLAGS += -std=c++11 -Wpedantic -Wall -Wextra -Werror
