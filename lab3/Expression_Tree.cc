@@ -1,6 +1,11 @@
-/*
- * Expression_Tree.cc
+/* FILNAMN:       Expression.cc
+ * LABORATION:    lab3
+ * PROGRAMMERARE:Kim Nguyen Hoang 910112-0260 Y3.c kimng797
+ *               Kerstin Soderqvist 911006-0309 Y3.c kerso255
+ * DATUM:         2014-10-17
+ * BESKRIVNING: Filen innehåller definitioner för klassen Expression_Tree som tar inkluderar Variable_Table
  */
+ 
 #include "Expression_Tree.h"
 #include "Variable_Table.h"
 #include <iostream>

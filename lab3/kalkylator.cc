@@ -1,4 +1,10 @@
-/*
+/* FILNAMN:       Expression.cc
+ * LABORATION:    lab3
+ * PROGRAMMERARE:Kim Nguyen Hoang 910112-0260 Y3.c kimng797
+ *               Kerstin Soderqvist 911006-0309 Y3.c kerso255
+ * DATUM:         2014-10-17
+ * BESKRIVNING:
+ *
  * kalkylator.cc
  *
  * Ett objekt av typen Calculator skapas i main() och Calculator::run()
@@ -12,7 +18,6 @@ using namespace std;
 
 int main()
 {
-    ///*
     Calculator calc;
 
     try
@@ -23,9 +28,6 @@ int main()
     {
         cout << "Ett okänt fel har inträffat.\n";
     }
-    //*/
-
-
 
     return 0;
 }

@@ -1,6 +1,12 @@
-/*
- * Expression.h
+/* FILNAMN:       Expression.h
+ * LABORATION:    lab3
+ * PROGRAMMERARE:Kim Nguyen Hoang 910112-0260 Y3.c kimng797
+ *               Kerstin Soderqvist 911006-0309 Y3.c kerso255
+ * DATUM:         2014-10-17
+ * BESKRIVNING: Filen innehåller deklarationer för klassen Expression som har Variable_Table inkluderat
  */
+
+
 #ifndef EXPRESSION_H
 #define EXPRESSION_H
 #include <iosfwd>
@@ -11,10 +17,6 @@
 /**
  * expression_error: kastas om fel inträffar i en Expression- operation;
  * ett diagnostiskt meddelande ska skickas med.
- */
-
-/*
- * Undantagsklass
  */
 class expression_error: public std::logic_error
 {
@@ -35,7 +37,7 @@ public:
 
     //Default-konstruktor
     Expression(class Expression_Tree* = nullptr);
-    //Expression(std::string infix, Variable_Table* vt = nullptr);
+
     //Destruktor
     ~Expression() = default;
 
@@ -57,11 +59,7 @@ public:
 
 private:
     Expression_Tree* first_node{nullptr};
-    //Variable_Table* v_table = new Variable_Table;
-    Variable_Table* v_table = nullptr;
-
-    //Expression_Tree* make_expression(const std::string& infix, Variable_Table* vt);
-};
+    Variable_Table* v_table = nullptr;};
 
 /**
  * swap: Byter innehåll på två Expression-objekt.

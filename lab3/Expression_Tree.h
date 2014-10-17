@@ -1,6 +1,11 @@
-/*
- * Expression_Tree.h
+/* FILNAMN:       Expression_Tree.h
+ * LABORATION:    lab3
+ * PROGRAMMERARE:Kim Nguyen Hoang 910112-0260 Y3.c kimng797
+ *               Kerstin Soderqvist 911006-0309 Y3.c kerso255
+ * DATUM:         2014-10-17
+ * BESKRIVNING: Filen innehåller deklarationer för klassen Expression_Tree som inkludera Variable_Table
  */
+
 #ifndef EXPRESSIONTREE_H
 #define EXPRESSIONTREE_H
 #include <iosfwd>
@@ -11,11 +16,6 @@
 /*
  * expression_tree_error: kastas om ett fel inträffar i en Expression-operation;
  * ett diagnostiskt meddelande ska skickas med.
- */
-
-
-/*
- *Undantagsklass
  */
 class expression_tree_error: public std::logic_error
 {
@@ -62,6 +62,8 @@ public:
         delete left_val;
         delete right_val;
     }
+    Binary_Operator(const Binary_Operator&) = default;
+    Binary_Operator(Binary_Operator&&) = default;
 
     virtual long double      evaluate() const override = 0;
     virtual std::string      get_postfix() const override;
@@ -110,6 +112,8 @@ public:
     Assign() = default;
     Assign(Expression_Tree* newleftNode, Expression_Tree* newrightNode);
     virtual ~Assign() = default;
+    Assign(const Assign&) = default;
+    Assign(Assign&&) = default;
 
     virtual long double evaluate() const override;
     virtual Expression_Tree* clone() const override;
@@ -125,6 +129,8 @@ public:
     Plus() = default;
     Plus(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "+") {}
     virtual ~Plus() = default;
+    Plus(const Plus&) = default;
+    Plus(Plus&&) = default;
 
     virtual long double evaluate() const override;
     virtual Expression_Tree* clone() const override;
@@ -140,6 +146,8 @@ public:
     Minus() = default;
     Minus(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "-") {}
     virtual ~Minus() = default;
+    Minus(const Minus&) = default;
+    Minus(Minus&&) = default;
 
     virtual long double evaluate() const override;
     virtual Expression_Tree* clone() const override;
@@ -155,6 +163,8 @@ public:
     Times() = default;
     Times(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "*") {}
     virtual ~Times() = default;
+    Times(const Times&) = default;
+    Times(Times&&) = default;
 
     virtual long double evaluate() const override;
     virtual Expression_Tree* clone() const override;
@@ -168,8 +178,11 @@ class Divide : public Binary_Operator
 {
 public:
     Divide() = default;
-    Divide(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "/") {}
+    Divide(Expression_Tree* newleftNode, Expression_Tree* newrightNode)
+        : Binary_Operator(newleftNode, newrightNode, "/") {}
     virtual ~Divide() = default;
+    Divide(const Divide&) = default;
+    Divide(Divide&&) = default;
 
     virtual long double evaluate() const override;
     virtual Expression_Tree* clone() const override;
@@ -185,6 +198,8 @@ public:
     Power() = default;
     Power(Expression_Tree* newleftNode, Expression_Tree* newrightNode) : Binary_Operator(newleftNode, newrightNode, "^") {}
     virtual ~Power() = default;
+    Power(const Power&) = default;
+    Power(Power&&) = default;
 
     virtual long double evaluate() const override;
     virtual Expression_Tree* clone() const override;
@@ -220,6 +235,8 @@ class Real : public Operand
 public:
     Real(long double value = 0) : Operand(), _value {value} {}
     virtual ~Real() = default;
+    Real(const Real&) = default;
+    Real(Real&&) = default;
 
     virtual long double      evaluate() const override;
     virtual std::string      str() const override;
@@ -241,6 +258,8 @@ public:
     Variable(std::string str, Variable_Table* v_table);
 
     virtual ~Variable() = default;
+    Variable(const Variable&) = default;
+    Variable(Variable&&) = default;
 
     virtual long double      evaluate() const override;
     virtual std::string      str() const override;

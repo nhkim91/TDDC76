@@ -1,3 +1,11 @@
+/* FILNAMN:       Variable_Table.cc
+ * LABORATION:    lab3
+ * PROGRAMMERARE:Kim Nguyen Hoang 910112-0260 Y3.c kimng797
+ *               Kerstin Soderqvist 911006-0309 Y3.c kerso255
+ * DATUM:         2014-10-17
+ * BESKRIVNING: Filen innehåller definitioner för klassen Variable_Table
+ */
+
 #include "Variable_Table.h"
 #include <map>
 #include <string>
@@ -11,7 +19,6 @@ void Variable_Table::insert(string name, long double value)
     v_table.insert(pair<string, double> (name, value));
 }
 
-//Vi ska inte ha "om variabeln inte finns"?
 void Variable_Table::remove(string name)
 {
     v_table.erase(name);
@@ -42,13 +49,11 @@ long double Variable_Table::get_value(string name) const
         throw variable_table_error{"The variable doesn't exist!"};
 }
 
-
 void Variable_Table::list(std::ostream &os) const
 {
     if(empty())
     {
-        return;
-        //throw variable_table_error{"The Variable_Table is empty!"};
+        os << "Empty list" << endl;
     }
     else
     {

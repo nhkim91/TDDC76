@@ -1,3 +1,10 @@
+/* FILNAMN:       Variable_Table.h
+ * LABORATION:    lab3
+ * PROGRAMMERARE:Kim Nguyen Hoang 910112-0260 Y3.c kimng797
+ *               Kerstin Soderqvist 911006-0309 Y3.c kerso255
+ * DATUM:         2014-10-17
+ * BESKRIVNING: Filen innehåller deklarationer för klassen Variable_Table
+ */
 #ifndef VARIABLE_TABLE_H
 #define VARIABLE_TABLE_H
 
@@ -11,9 +18,6 @@
  * ett diagnostiskt meddelande ska skickas med.
  */
 
-/*
- * Undantagsklass
- */
 class variable_table_error: public std::logic_error
 {
 public:
@@ -35,24 +39,6 @@ public:
 
     //Kopieringskonstruktor, flyttkonstruktor
     Variable_Table(const Variable_Table&) = default;
-
-    /*
-    Variable_Table(Variable_Table&&) noexcept = default;
-    //Kopieringstilldelning, flytt-tilldelning
-    Variable_Table& operator=(const Variable_Table&) &;
-    Variable_Table& operator=(Variable_Table&&) &;
-    */
-
-    /*
-     insert(namn, värde) ska lägga till en ny variabel och dess värde i tabellen.
-    •remove(namn) ska ta bort en variabel och dess värde ur tabellen.
-    •find(namn) ska returnera true om variabeln finns i tabellen, annars false.
-    •set_value(namn, värde) ska ändra värdet för en variabel som finns i tabellen.
-    •get_value(namn) ska returnera värdet för en variabel som finns i tabellen.
-    •list(ostream) ska skiva ut alla variabler i tabellen på en utström. För varje variabel skrivs först dess namn ut, följt av ett kolon och ett mellanrum och sist på raden variabelns värde.
-    •clear() ska tömma tabellen.
-    •empty() ska returnera true om tabellen är tom, annars false.
-    */
 
     void        insert(std::string, long double);
     void        remove(std::string);
