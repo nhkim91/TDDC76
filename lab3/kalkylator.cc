@@ -2,7 +2,7 @@
  * LABORATION:    lab3
  * PROGRAMMERARE:Kim Nguyen Hoang 910112-0260 Y3.c kimng797
  *               Kerstin Soderqvist 911006-0309 Y3.c kerso255
- * DATUM:         2014-10-17
+ * DATUM:         2014-11-13
  * BESKRIVNING:
  *
  * kalkylator.cc
@@ -14,6 +14,7 @@
  */
 #include "Calculator.h"
 #include <iostream>
+
 using namespace std;
 
 int main()

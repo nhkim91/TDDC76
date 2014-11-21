@@ -2,10 +2,10 @@
  * LABORATION:    lab3
  * PROGRAMMERARE:Kim Nguyen Hoang 910112-0260 Y3.c kimng797
  *               Kerstin Soderqvist 911006-0309 Y3.c kerso255
- * DATUM:         2014-10-17
+ * DATUM:         2014-11-13
  * BESKRIVNING: Filen innehåller definitioner för klassen Expression_Tree som tar inkluderar Variable_Table
  */
- 
+
 #include "Expression_Tree.h"
 #include "Variable_Table.h"
 #include <iostream>
@@ -22,29 +22,24 @@ using namespace std;
 
 string Binary_Operator::get_postfix() const
 {
-    return left_val->get_postfix() + " " + right_val->get_postfix() + " " + _str;
+    return left_val->get_postfix() + " " + right_val->get_postfix() + " " + str();
 }
 
 string Binary_Operator::get_infix() const
 {
-    if(_str == "=" || _str == "+" || _str == "-")
+    if (str() == "=" || str() == "+" || str() == "-")
     {
-        return left_val->get_infix() + " " + _str + " " + right_val->get_infix();
+        return left_val->get_infix() + " " + str() + " " + right_val->get_infix();
     }
     else
-        return "(" + left_val->get_infix() + " " + _str + " " + right_val->get_infix() + ")";
-}
-
-string Binary_Operator::str() const
-{
-    return _str;
+        return "(" + left_val->get_infix() + " " + str() + " " + right_val->get_infix() + ")";
 }
 
 void Binary_Operator::print(ostream& os, int depth = 0) const
 {
     right_val->print(os, depth + 2);
     os << endl << string(depth + 1, ' ') << '/' << endl;
-    os << string(depth, ' ') << _str << endl;
+    os << string(depth, ' ') << str() << endl;
     os << string(depth + 1, ' ') << '\\' << endl;
     left_val->print(os, depth + 2);
 }
@@ -68,7 +63,7 @@ string Operand::get_infix() const
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 Assign::Assign(Expression_Tree* newleftNode, Expression_Tree* newrightNode)
-    : Binary_Operator(newleftNode, newrightNode, "=")
+    : Binary_Operator(newleftNode, newrightNode)
 {
     if (dynamic_cast<Variable*>(newleftNode) == nullptr)
     {
@@ -89,6 +84,11 @@ Expression_Tree* Assign::clone() const
     return new Assign(*this);
 }
 
+string Assign::str() const
+{
+    return "=";
+}
+
 //-*-*-*-*-*-*-*-*-*-*-*-*-
 //-*-*-*-*- Plus -*-*-*-*-
 //-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -101,6 +101,11 @@ long double Plus::evaluate() const
 Expression_Tree* Plus::clone() const
 {
     return new Plus(*this);
+}
+
+string Plus::str() const
+{
+    return "+";
 }
 
 //-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -117,6 +122,11 @@ Expression_Tree* Minus::clone() const
     return (new Minus(*this));
 }
 
+string Minus::str() const
+{
+    return "-";
+}
+
 //-*-*-*-*-*-*-*-*-*-*-*-*-
 //-*-*-*-*- Times -*-*-*-*-
 //-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -129,6 +139,11 @@ long double Times::evaluate() const
 Expression_Tree* Times::clone() const
 {
     return (new Times(*this));
+}
+
+string Times::str() const
+{
+    return "*";
 }
 
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -145,6 +160,10 @@ Expression_Tree* Divide::clone() const
     return (new Divide(*this));
 }
 
+string Divide::str() const
+{
+    return "/";
+}
 //-*-*-*-*-*-*-*-*-*-*-*-*-
 //-*-*-*-*- Power -*-*-*-*-
 //-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -157,6 +176,11 @@ long double Power::evaluate() const
 Expression_Tree* Power::clone() const
 {
     return (new Power(*this));
+}
+
+string Power::str() const
+{
+    return "^";
 }
 
 //-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -221,12 +245,12 @@ Variable::Variable(std::string str, Variable_Table* v_table)
 
 long double Variable::evaluate() const
 {
-    if(ref_v_table->find(_str))
+    if (ref_v_table->find(_str))
     {
         return ref_v_table->get_value(_str);
     }
     else
-        throw expression_tree_error{"Variable name doesn't exist!"};
+        throw expression_tree_error {"Variable name doesn't exist!"};
 }
 
 
@@ -251,12 +275,12 @@ long double Variable::get_value() const
 }
 
 void Variable::set_value(long double new_val)
-{   
+{
     _value = new_val;
-    if(ref_v_table->find(_str))
+    if (ref_v_table->find(_str))
     {
         ref_v_table->set_value(_str, _value);
     }
     else
-        throw expression_tree_error{"Variable name doesn't exist!"};
+        throw expression_tree_error {"Variable name doesn't exist!"};
 }

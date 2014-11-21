@@ -2,7 +2,7 @@
  * LABORATION:    lab3
  * PROGRAMMERARE:Kim Nguyen Hoang 910112-0260 Y3.c kimng797
  *               Kerstin Soderqvist 911006-0309 Y3.c kerso255
- * DATUM:         2014-10-17
+ * DATUM:         2014-11-13
  * BESKRIVNING: Filen innehåller deklarationer för klassen Expression som har Variable_Table inkluderat
  */
 
@@ -22,10 +22,10 @@ class expression_error: public std::logic_error
 {
 public:
     explicit expression_error(const std::string& what_arg) noexcept
-        : std::logic_error(what_arg) {}
+: std::logic_error(what_arg) {}
 
     explicit expression_error(const char* what_arg) noexcept
-        : std::logic_error(what_arg) {}
+: std::logic_error(what_arg) {}
 };
 
 /**
@@ -48,7 +48,7 @@ public:
 
     //Kopieringstilldelning, flytt-tilldelning
     Expression& operator=(const Expression&) &;
-    Expression& operator=(Expression&&) &;
+    Expression& operator=(Expression &&) &;
 
     long double evaluate() const;
     std::string get_postfix() const;
@@ -58,8 +58,9 @@ public:
     void        swap(Expression&);
 
 private:
-    Expression_Tree* first_node{nullptr};
-    Variable_Table* v_table = nullptr;};
+    Expression_Tree* first_node {nullptr};
+    Variable_Table* v_table = nullptr;
+};
 
 /**
  * swap: Byter innehåll på två Expression-objekt.

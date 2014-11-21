@@ -2,7 +2,7 @@
  * LABORATION:    lab3
  * PROGRAMMERARE:Kim Nguyen Hoang 910112-0260 Y3.c kimng797
  *               Kerstin Soderqvist 911006-0309 Y3.c kerso255
- * DATUM:         2014-10-17
+ * DATUM:         2014-11-13
  * BESKRIVNING: Filen innehåller definitioner för klassen Calculator och inkluderar klassen Expression
  */
 
@@ -23,9 +23,7 @@ const string Calculator::valid_cmds_("?HUBPTSILARVXN");
  * run: Huvudfunktionen för kalkylatorn. Skriver ut hjälpinformation
  * och läser sedan sedan in ett kommando i taget och utför det.
  */
-void
-Calculator::
-run()
+void Calculator::run()
 {
     cout << "Välkommen till Kalkylatorn!\n\n";
     print_help();
@@ -49,9 +47,7 @@ run()
 /**
  * print_help: Skriver ut kommandorepertoaren.
  */
-void
-Calculator::
-print_help()
+void Calculator::print_help()
 {
     cout << "  H, ?  Skriv ut denna information\n";
     cout << "  U     Mata in ett nytt uttryck\n";
@@ -79,9 +75,7 @@ print_help()
  * kommandot i medlemmen command_, för vidare behandling av andra operationer.
  * Ingen kontroll görs om det skrivits mer, i så fall skräp, på kommandoraden.
  */
-void
-Calculator::
-get_command()
+void Calculator::get_command()
 {
     cout << ">> ";
     cin >> command_;
@@ -94,24 +88,16 @@ get_command()
         if (isdigit(cin.peek()))
         {
             cin >> n;
-
-            if (n <= 0 || n > expressions.size())
-            {
-                cout << n << "För stort n!" << endl;
-            }
-
         }
     }
-
 }
+
 /**
  * valid_command: Kontrollerar om kommandot som finns i medlemmen command_
  * tillhör den tillåtna kommandorepertoraren och returnerar antingen true
  * (giltigt kommando) eller false (ogiltigt kommando).
  */
-bool
-Calculator::
-valid_command() const
+bool Calculator::valid_command() const
 {
     if (valid_cmds_.find(command_) == string::npos)
     {
@@ -120,15 +106,23 @@ valid_command() const
     }
     return true;
 }
-
+/*Hjälpfunktin som kollar om n är giltigt
+ */
+bool Calculator::check_n() const
+{
+    if (n <= 0 || n > expressions.size())
+    {
+        cout  << "Uttryck på plats " << n << " finns inte! Finns inget aktuellt uttryck" << endl;
+        return false;
+    }
+    return true;
+}
 /**
  * execute_command: Utför kommandot som finns i medlemmen command_. Kommandot
  * förutsätts ha kontrollerats med valid_command() och alltså är ett giltigt
  * kommando.
  */
-void
-Calculator::
-execute_command()
+void Calculator::execute_command()
 {
     if (command_ == 'H' || command_ == '?')
         print_help();
@@ -137,32 +131,39 @@ execute_command()
         read_expression(cin);
         n = expressions.size();
     }
-    else if (command_ == 'B' && n > 0)
-        cout << expressions[n - 1].evaluate() << endl;
     else if (command_ == 'B')
-        cout << expressions[n - 1].evaluate() << endl;
-    else if (command_ == 'P' && n > 0)
-        cout << expressions[n - 1].get_postfix() << endl;
+    {
+        if (check_n())
+            cout << expressions[n - 1].evaluate() << endl;
+    }
     else if (command_ == 'P')
-        cout << expressions[n - 1].get_postfix() << endl;
-    else if (command_ == 'I' && n > 0)
-        cout << expressions[n - 1].get_infix() << endl;
+    {
+        if (check_n())
+            cout << expressions[n - 1].get_postfix() << endl;
+    }
     else if (command_ == 'I')
-        cout << expressions[n - 1].get_infix() << endl;
+    {
+        if (check_n())
+            cout << expressions[n - 1].get_infix() << endl;
+    }
     else if (command_ == 'L')
         list_infix();
-    else if (command_ == 'T' && n > 0)
-        expressions[n - 1].print_tree(cout);
     else if (command_ == 'T')
-        expressions[n - 1].print_tree(cout);
+    {
+        if (check_n())
+            expressions[n - 1].print_tree(cout);
+    }
     else if (command_ == 'N')
         cout << expressions.size() << endl;
-    else if (command_ == 'A' && n > 0)
-        expressions[n - 1] = expressions[n - 1];
-    else if (command_ == 'R' && n > 0)
-        expressions.erase(expressions.begin() + n - 1);
+    else if (command_ == 'A')
+    {
+        check_n(); //sätter n till aktuellt uttryck, behöver bara kontrollera om n > 0
+    }
     else if (command_ == 'R')
-        expressions.erase(expressions.begin() + n - 1);
+    {
+        if (check_n())
+            expressions.erase(expressions.begin() + n - 1);
+    }
     else if (command_ == 'V')
         v_table->list(cout);
     else if (command_ == 'X')
@@ -173,14 +174,12 @@ execute_command()
         cout << "Detta ska inte hända!" << endl;
 }
 
+
 /**
  * read_expression: läser ett infixuttryck från inströmmen is och ger detta
  * till funktionen make_expression() som returnerar ett objekt av typen
- * Expression, vilket lagras som "aktuellt uttryck" i current_expression_.
  */
-void
-Calculator::
-read_expression(istream& is)
+void Calculator::read_expression(istream& is)
 {
     string infix;
 
@@ -188,9 +187,6 @@ read_expression(istream& is)
 
     if (getline(is, infix))
     {
-        //current_expression_ = make_expression(infix, v_table);
-
-        //Lägger aktuellt uttryck längst bak i vektorn expressions
         expressions.push_back(make_expression(infix, v_table));
     }
     else
@@ -198,7 +194,6 @@ read_expression(istream& is)
         cout << "Felaktig inmatning!\n";
     }
 }
-
 
 //Skriver alla uttryck som infix
 void Calculator::list_infix() const

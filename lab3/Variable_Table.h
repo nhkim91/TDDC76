@@ -2,7 +2,7 @@
  * LABORATION:    lab3
  * PROGRAMMERARE:Kim Nguyen Hoang 910112-0260 Y3.c kimng797
  *               Kerstin Soderqvist 911006-0309 Y3.c kerso255
- * DATUM:         2014-10-17
+ * DATUM:         2014-11-13
  * BESKRIVNING: Filen innehåller deklarationer för klassen Variable_Table
  */
 #ifndef VARIABLE_TABLE_H
@@ -22,10 +22,10 @@ class variable_table_error: public std::logic_error
 {
 public:
     explicit variable_table_error(const std::string& what_arg) noexcept
-        : std::logic_error(what_arg) {}
+: std::logic_error(what_arg) {}
 
     explicit variable_table_error(const char* what_arg) noexcept
-        : std::logic_error(what_arg) {}
+: std::logic_error(what_arg) {}
 };
 
 class Variable_Table

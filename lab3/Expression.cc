@@ -2,10 +2,10 @@
  * LABORATION:    lab3
  * PROGRAMMERARE:Kim Nguyen Hoang 910112-0260 Y3.c kimng797
  *               Kerstin Soderqvist 911006-0309 Y3.c kerso255
- * DATUM:         2014-10-17
+ * DATUM:         2014-11-13
  * BESKRIVNING: Filen innehåller definitioner för klassen Expression som tar inkluderar Expression_Tree
  */
- 
+
 #include "Expression.h"
 #include "Expression_Tree.h"
 #include "Variable_Table.h"
@@ -18,7 +18,12 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+
 using namespace std;
+
+/* Todo...
+ * fråga om exception i calculator.cc
+ */
 
 //Default-konstruktor
 Expression::Expression(class Expression_Tree* tree)
@@ -75,7 +80,7 @@ long double Expression::evaluate() const
  */
 string Expression::get_postfix() const
 {
-    if (first_node == nullptr)
+    if (empty())
     {
         return "";
     }
@@ -88,7 +93,7 @@ string Expression::get_postfix() const
  */
 string Expression::get_infix() const
 {
-    if (first_node == nullptr)
+    if (empty())
     {
         return "";
     }
@@ -114,7 +119,7 @@ bool Expression::empty() const
  */
 void Expression::print_tree(std::ostream &os) const
 {
-    if (first_node == nullptr)
+    if (empty())
     {
         return;
     }
@@ -391,71 +396,99 @@ Expression_Tree* make_expression_tree(const std::string& postfix, Variable_Table
     stack<Expression_Tree*> tree_stack;
     string                  token;
     istringstream           ps {postfix};
+    Expression_Tree* rhs;
+    Expression_Tree* lhs;
 
     while (ps >> token)
     {
-        if (is_operator(token))
+        try
         {
-            if (tree_stack.empty())
+            if (is_operator(token))
             {
+                if (tree_stack.empty())
+                {
+                    throw expression_error {"Wrong postfix!"};
+                }
+                rhs = tree_stack.top();
+                tree_stack.pop();
+
+                if (tree_stack.empty())
+                {
+                    delete rhs;
+                    throw expression_error {"Wrong postfix!"};
+                }
+                lhs = tree_stack.top();
+                tree_stack.pop();
+
+                if (token == "^")
+                {
+                    tree_stack.push(new Power {lhs, rhs});
+                }
+                else if (token == "*")
+                {
+                    tree_stack.push(new Times {lhs, rhs});
+                }
+                else if (token == "/")
+                {
+                    tree_stack.push(new Divide {lhs, rhs});
+                }
+                else if (token == "+")
+                {
+                    tree_stack.push(new Plus {lhs, rhs});
+                }
+                else if (token == "-")
+                {
+                    tree_stack.push(new Minus {lhs, rhs});
+                }
+                else if (token == "=")
+                {
+                    tree_stack.push(new Assign {lhs, rhs});
+                }
+            }
+            else  if (is_integer(token))
+            {
+                tree_stack.push(new Integer {std::stol(token.c_str())});
+            }
+            else if (is_real(token))
+            {
+                tree_stack.push(new Real {std::stold(token.c_str())});
+            }
+            else if (is_identifier(token))
+            {
+                tree_stack.push(new Variable {token, v_table});
+            }
+            else
+            {
+                while (!tree_stack.empty())
+                {
+                    delete tree_stack.top();
+                    tree_stack.pop();
+                }
+
                 throw expression_error {"Wrong postfix!"};
             }
-            Expression_Tree* rhs {tree_stack.top()};
-            tree_stack.pop();
+        }
 
-            if (tree_stack.empty())
-            {
-                throw expression_error {"Wrong postfix!"};
-            }
-            Expression_Tree* lhs {tree_stack.top()};
-            tree_stack.pop();
+        catch (...)
+        {
+            delete lhs;
+            delete rhs;
 
-            if (token == "^")
+            while (!tree_stack.empty())
             {
-                tree_stack.push(new Power {lhs, rhs});
+                delete tree_stack.top();
+                tree_stack.pop();
             }
-            else if (token == "*")
-            {
-                tree_stack.push(new Times {lhs, rhs});
-            }
-            else if (token == "/")
-            {
-                tree_stack.push(new Divide {lhs, rhs});
-            }
-            else if (token == "+")
-            {
-                tree_stack.push(new Plus {lhs, rhs});
-            }
-            else if (token == "-")
-            {
-                tree_stack.push(new Minus {lhs, rhs});
-            }
-            else if (token == "=")
-            {
-                tree_stack.push(new Assign {lhs, rhs});
-            }
-        }
-        else if (is_integer(token))
-        {
-            tree_stack.push(new Integer {std::stol(token.c_str())});
-        }
-        else if (is_real(token))
-        {
-            tree_stack.push(new Real {std::stold(token.c_str())});
-        }
-        else if (is_identifier(token))
-        {
-            tree_stack.push(new Variable {token, v_table});
-        }
-        else
-        {
-            throw expression_error {"Wrong postfix!"};
+
+            throw;
         }
     }
-    // Det ska bara finnas ett träd på stacken om korrekt postfix.
+// Det ska bara finnas ett träd på stacken om korrekt postfix.
+
 
     if (tree_stack.empty())
     {
+
         throw expression_error {"No postfix is given!"};
     }
 
@@ -469,12 +502,12 @@ Expression_Tree* make_expression_tree(const std::string& postfix, Variable_Table
         throw expression_error {"Incorrect postfix!"};
     }
 
-    // Returnera trädet.
+// Returnera trädet.
     return tree_stack.top();
 }
 } // namespace
 
-Expression make_expression(const string& infix, Variable_Table* v_table)
+Expression make_expression(const string & infix, Variable_Table * v_table)
 {
     return Expression {make_expression_tree(make_postfix(infix), v_table)};
 }
